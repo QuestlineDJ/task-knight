@@ -1,7 +1,7 @@
 {
+  "homepage": "https://github.com/QuestlineDJ/task-knight.git",
   "name": "task-knight",
   "version": "0.0.0",
-  "homepage": "https://questlinedj.github.io/react-gh-pages",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
