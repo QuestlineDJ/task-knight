@@ -1,34 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="container">
+        <div className="levelup">
+          <img
+            src={"src/assets/Task Knight Assets/Corner UI/emptyLevelBadge.png"}
+            alt="Player level number"
+          />
+        </div>
+        <div className="gold">
+          <img
+            src={"src/assets/Task Knight Assets/Corner UI/goldBag.png"}
+            alt="Player gold amount"
+          />
+        </div>
+        <div className="player">
+          <img
+            src={
+              "src/assets/Task Knight Assets/Character UI & Sprites/playerCharacter_default.png"
+            }
+            alt="The player character, a small knight"
+          />
+        </div>
+        <div className="boss">
+          <img
+            src={
+              "src/assets/Task Knight Assets/Character UI & Sprites/boss_dragon.png"
+            }
+            alt="The boss the player is fighting"
+          />
+        </div>
+        <div className="main">
+          <img
+            src={
+              "src/assets/Task Knight Assets/Main Panel/Task Panel/panel_tasks.png"
+            }
+            alt="The main panel containing the player's tasks"
+          />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
