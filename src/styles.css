@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Uncial+Antiqua&display=swap');
+
+.medieval-button {
+  font-family: 'Uncial Antiqua', cursive;
+  font-size: 18px;
+  color: #fff;
+  background: linear-gradient(to bottom, #8b5a2b, #3e2723);
+  border: 4px solid #5d4037;
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+.medieval-button:hover {
+  background: linear-gradient(to bottom, #a76d3f, #5d4037);
+  transform: scale(1.05);
+}
+
+.red-glow {
+  background: linear-gradient(to bottom, #8b0000, #5a0000);
+  border-color: #aa0000;
+  box-shadow: 0px 0px 15px red;
+}
