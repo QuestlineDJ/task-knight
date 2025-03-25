@@ -14,6 +14,7 @@
  *
  * Author: Ryan Herwig
  */
+import { useState } from "react";
 
 const IS_DEBUGGING = false;
 
@@ -95,9 +96,9 @@ function SaveFile() {
 /**
  * Loads the file selected onto the local storage
  */
-function LoadFile(event: Event) {
+function LoadFile(event: React.ChangeEvent<HTMLInputElement>) {
     //Gets the input from the chosen file
-    var fileInput = event.target;
+    var fileInput = event.currentTarget!.files;
 
     //Creates a reader to read a txt file
     var reader = new FileReader();
@@ -119,7 +120,7 @@ function LoadFile(event: Event) {
     };
 
     //Have the reader start reading the first file inputted. Ignore all other files.
-    reader.readAsText(fileInput!.files[0]);
+    reader.readAsText(fileInput!.item(0) as Blob);
 }
 
 /**
