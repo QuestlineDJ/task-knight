@@ -21,26 +21,39 @@ function EnemyDamage() {
 
 const EnemyDamage = () => {
   const [health, setHealth] = useState(100);
-  const [isChecked, setIsChecked] = useState(false);
+  const [checkboxes, setCheckboxes] = useState<boolean[]>([
+    false,
+    false,
+    false,
+    false,
+  ]);
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setHealth((prevHealth) => Math.max(0, prevHealth - 10));
-    }
-    setIsChecked(event.target.checked);
-  };
+  const handleCheckboxChange =
+    (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newCheckboxes = [...checkboxes];
+      const wasChecked = newCheckboxes[index];
+
+      newCheckboxes[index] = event.target.checked;
+      setCheckboxes(newCheckboxes);
+
+      setHealth((prevHealth) =>
+        Math.max(0, prevHealth + (wasChecked ? 10 : -10))
+      );
+    };
 
   return (
     <div>
-      <label>
-        <input
-          type="checkbox"
-          checked={isChecked}
-          onChange={handleCheckboxChange}
-        />
-        Damage Element
-      </label>
       <p>Health: {health}</p>
+      {checkboxes.map((isChecked, index) => (
+        <label key={index} style={{ display: "block", margin: "5px 0" }}>
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleCheckboxChange(index)}
+          />
+          Damage {index + 1}
+        </label>
+      ))}
     </div>
   );
 };
