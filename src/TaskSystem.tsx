@@ -80,7 +80,10 @@ export function TaskMaster() {
 
   return (
     <div>
-      <div className="enemy-container">Health: {enemyHealth}</div>
+      <div className="enemy-container">
+        Health: {enemyHealth}
+        <img src="./src/reddot.png" />
+      </div>
       <button type="button" onClick={() => setShowActive(!showActive)}>
         Toggle Active Tasks
       </button>
