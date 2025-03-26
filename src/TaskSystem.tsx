@@ -1,4 +1,6 @@
 import { useState, useId } from "react";
+import redDot from "./reddot.png";
+import "./App.css";
 
 function get_current_time(): number {
   return Math.floor(Date.now() / 1000);
@@ -82,7 +84,7 @@ export function TaskMaster() {
     <div>
       <div className="enemy-container">
         Health: {enemyHealth}
-        <img src="./src/reddot.png" />
+        <img src={redDot} />
       </div>
       <button type="button" onClick={() => setShowActive(!showActive)}>
         Toggle Active Tasks
