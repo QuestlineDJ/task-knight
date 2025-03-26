@@ -80,6 +80,7 @@ export function TaskMaster() {
 
   return (
     <div>
+      Health: {enemyHealth}
       <button type="button" onClick={() => setShowActive(!showActive)}>
         Toggle Active Tasks
       </button>
@@ -110,7 +111,6 @@ export function TaskMaster() {
         active={showComplete}
         tasks={completeTasks}
       />
-      <div>Health: {enemyHealth}</div>
     </div>
   );
 }
