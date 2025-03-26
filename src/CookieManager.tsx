@@ -21,7 +21,7 @@
  * @param {string} value The value to be stored inside the cookie
  * @param {float} expirationDate The date the cookie will expire
  */
-function CreateCookie(name: string, value: string, expirationDate: number)
+export function CreateCookie(name: string, value: string, expirationDate: number)
 {
     //Creates a cookie with the specified name, and expiration date (in days)
     document.cookie = name + '=' + value + '; ' + GetExpirationDate(expirationDate) + ' path=/; Secure; SameSite=Lax';
@@ -106,4 +106,10 @@ function GetTime(days: number)
 
     //Returns the date as a string
     return date;
+}
+
+const functions = {
+    CreateCookie,
+    ReadCookie,
+    DeleteCookie
 }

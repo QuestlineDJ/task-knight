@@ -14,7 +14,7 @@
  *
  * Author: Ryan Herwig
  */
-import { useState } from "react";
+import {MouseEvent} from "react";
 
 const IS_DEBUGGING = false;
 
@@ -23,7 +23,7 @@ const IS_DEBUGGING = false;
  * @param {string} name The name of the cookie to create
  * @param {string} value The value to be stored inside the cookie
  */
-function SetLocalStorage(key: string, value: string) {
+export function SetLocalStorage(key: string, value: string) {
     localStorage.setItem(key, value);
 }
 
@@ -32,14 +32,14 @@ function SetLocalStorage(key: string, value: string) {
  * @param {string} cookie_name - the key of the cookie
  * @returns string - the value inside the key
  */
-function GetLocalStorage(key: string) {
+export function GetLocalStorage(key: string) {
     if (key != "HashData" || IS_DEBUGGING) //Reserved Word
         return localStorage.getItem(key);
     else
         return "";
 }
 
-function GetAllLocalStorage() {
+export function GetAllLocalStorage() {
     var data = "";
     //Loops through the local storage contents
     for (var i = 0; i < localStorage.length; i++) {
@@ -55,14 +55,14 @@ function GetAllLocalStorage() {
 /**
  * Deletes ALL local storage related to this webpage
  */
-function DeleteLocalStorage() {
+export function DeleteLocalStorage() {
     localStorage.clear();
 }
 
 /**
  * Saves the local storage data into a txt file and downloads it onto the computer
  */
-function SaveFile() {
+export function SaveFile(event: MouseEvent) {
     //Data
     var data = GetAllLocalStorage();
     data = Encrypt();
@@ -96,9 +96,16 @@ function SaveFile() {
 /**
  * Loads the file selected onto the local storage
  */
-function LoadFile(event: React.ChangeEvent<HTMLInputElement>) {
+
+//export const LoadFile = (event: any) =>
+//{
+
+//}
+
+
+export function LoadFile(event: React.ChangeEvent<HTMLInputElement>) {
     //Gets the input from the chosen file
-    var fileInput = event.currentTarget!.files;
+    var fileInput = event.target;
 
     //Creates a reader to read a txt file
     var reader = new FileReader();
@@ -120,8 +127,9 @@ function LoadFile(event: React.ChangeEvent<HTMLInputElement>) {
     };
 
     //Have the reader start reading the first file inputted. Ignore all other files.
-    reader.readAsText(fileInput!.item(0) as Blob);
+    reader.readAsText(fileInput.files[0]);
 }
+    
 
 /**
  * Creates local storage data from a certain string format
@@ -153,7 +161,7 @@ function EditLocalStorageFromFile(data: string) {
 }
 
 //Variables to set up Vigenere Cipher
-const alphabet = "Aa0BbCc1DdEe,FfGg3HhIi3Jj:KkLl4MmNn5Oo=Pp6QqRr7SsTt UuVv8WwXx;9YyZz";
+const alphabet = "U+CZN0?`hwW4pjKf:VXSn#L<531/[z_.8}&kbD\"Go7J!(@sHI*e,-g]r2Mi6yPQaOdxFY$R=9T{E%^>cB;vu|)q~ ltmA\\'";
 const alphabetLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 const keyWord = "MaRSBAR";
 const keyLength = keyWord.length;
