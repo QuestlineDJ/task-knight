@@ -14,9 +14,8 @@
  *
  * Author: Ryan Herwig
  */
-import {MouseEvent} from "react";
 
-const IS_DEBUGGING = false;
+const IS_DEBUGGING = true;
 
 /**
  * Creates a cookie with a specified name and value
@@ -62,11 +61,10 @@ export function DeleteLocalStorage() {
 /**
  * Saves the local storage data into a txt file and downloads it onto the computer
  */
-export function SaveFile(event: MouseEvent) {
+export function SaveFile() {
     //Data
     var data = GetAllLocalStorage();
     data = Encrypt();
-
     //Converts the data to a plain text Blob
     //A blob is a raw data type that is immutable. It can be read as binary or as text and can be converted into a ReadableStream.
     var dataToBlob = new Blob([data], { type: "text/plain" });
@@ -96,13 +94,6 @@ export function SaveFile(event: MouseEvent) {
 /**
  * Loads the file selected onto the local storage
  */
-
-//export const LoadFile = (event: any) =>
-//{
-
-//}
-
-
 export function LoadFile(event: React.ChangeEvent<HTMLInputElement>) {
     //Gets the input from the chosen file
     var fileInput = event.target;
@@ -113,23 +104,24 @@ export function LoadFile(event: React.ChangeEvent<HTMLInputElement>) {
     //Once the reader has finished loading the file, get the result
     reader.onload = function () {
         //Grabs the read data
-        var data = reader.result;
-        data = Decyrpt(data as string);
-        //Loops forever until a semicolon is not found
-        while (data.indexOf(";") != -1) {
-            //Creates local storage data from text file
-            data = EditLocalStorageFromFile(data);
-        }
-        //Creates one more local storage data for last one
-        EditLocalStorageFromFile(data);
+        var data = reader.result as string;
+        data = Decyrpt(data);
+        if (data != "") {
+            //Loops forever until a semicolon is not found
+            while (data.indexOf(";") != -1) {
+                //Creates local storage data from text file
+                data = EditLocalStorageFromFile(data);
+            }
+            //Creates one more local storage data for last one
+            EditLocalStorageFromFile(data);
 
-        console.log(GetAllLocalStorage());
+            console.log(GetAllLocalStorage());
+        }
     };
 
     //Have the reader start reading the first file inputted. Ignore all other files.
     reader.readAsText(fileInput.files[0]);
 }
-    
 
 /**
  * Creates local storage data from a certain string format
@@ -162,6 +154,7 @@ function EditLocalStorageFromFile(data: string) {
 
 //Variables to set up Vigenere Cipher
 const alphabet = "U+CZN0?`hwW4pjKf:VXSn#L<531/[z_.8}&kbD\"Go7J!(@sHI*e,-g]r2Mi6yPQaOdxFY$R=9T{E%^>cB;vu|)q~ ltmA\\'";
+const hashDifference = alphabet.length / 100;
 const alphabetLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 const keyWord = "MaRSBAR";
 const keyLength = keyWord.length;
@@ -233,6 +226,18 @@ function Encrypt() {
     for (var i = 0; i < encyrptedText.length; i++) {
         hashValue = Math.round((hashValue + alphabet.indexOf(encyrptedText.at(i) as string) / 100) * 100) / 100;
     }
+
+    //Increases hash to be equal to the length of the alphabet
+    var difference = Math.round((hashValue % hashDifference) * 100) / 100;
+    var addedValue = Math.round((hashDifference - difference) * 100) / 100;
+    if (addedValue == hashDifference)
+        addedValue = 0;
+
+    //Adds extra letter to the end
+    encyrptedText += alphabet.at(addedValue * 100);
+
+    //Increases hash value by added letter's value
+    hashValue = Math.round((hashValue + addedValue) * 100) / 100;
     SetLocalStorage("HashData", hashValue as any as string);
 
     if (IS_DEBUGGING) {
@@ -246,6 +251,19 @@ function Encrypt() {
 function Decyrpt(text: string) {
     //Gets the cipherAlphabet
     var cipherAlphabets = CreateCipherAlphabets();
+
+    //Hashes encyrpted text
+    var hashValue = 0;
+    for (var i = 0; i < text.length; i++) {
+        hashValue = Math.round((hashValue + alphabet.indexOf(text.at(i) as string) / 100) * 100) / 100;
+    }
+    console.log("Hash: " + hashValue);
+    console.log(Math.round((hashValue % hashDifference) * 100) / 100);
+    if (Math.round((hashValue % hashDifference) * 100) / 100 != hashDifference
+            && Math.round((hashValue % hashDifference) * 100) / 100 != 0) {
+        console.log("ERROR: Incorrect File or File has been tampered with!");
+        return "";
+    }
 
     //Unsalts the encyption
     var plaintext = "";
