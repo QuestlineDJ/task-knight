@@ -16,7 +16,7 @@ function SaveWindow() {
                     <h2>TEST</h2>
                 </div>
                 <li className='button'><SaveButton/></li>
-                <input type="file" className='button' onChange={LoadFile}></input>
+                <input type="file" accept='.txt' className='button' onChange={LoadFile}></input>
             </div>
         </div>
         ) : null}
