@@ -44,8 +44,8 @@
 .enemy-container {
   position: absolute;
   right: 20px;
-  top:50px;
-  transform:translateY(-50%);
-  font-size:20px;
-  font-weight:bold;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100px;
+  height: auto;
 }
