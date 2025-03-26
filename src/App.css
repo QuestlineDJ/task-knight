@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+
+.enemy-container {
+  position: absolute;
+  left: 20px;
+  top:50px;
+  transform:translateY(-50%);
+  font-size:20px;
+  font-weight:bold;
+}
