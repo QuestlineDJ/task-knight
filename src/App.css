@@ -43,7 +43,7 @@
 
 .enemy-container {
   position: absolute;
-  left: 20px;
+  right: 20px;
   top:50px;
   transform:translateY(-50%);
   font-size:20px;
