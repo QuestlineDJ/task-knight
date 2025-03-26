@@ -81,10 +81,10 @@ export function TaskMaster() {
   }
 
   return (
-    <div>
+    <div style={{ position: "relative", height: "100vh" }}>
       <div className="enemy-container">
         Health: {enemyHealth}
-        <img src={redDot} />
+        <img src={redDot} alt="Enemy Indicator" />
       </div>
       <button type="button" onClick={() => setShowActive(!showActive)}>
         Toggle Active Tasks
