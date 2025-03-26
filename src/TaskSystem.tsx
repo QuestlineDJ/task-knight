@@ -84,7 +84,7 @@ export function TaskMaster() {
     <div>
       <div className="enemy-container">
         Health: {enemyHealth}
-        {enemyHealth >= 0 && <img src={redDot} alt="Enemy Indicator" />}
+        {enemyHealth > 1 && <img src={redDot} alt="Enemy Indicator" />}
       </div>
 
       <button type="button" onClick={() => setShowActive(!showActive)}>
