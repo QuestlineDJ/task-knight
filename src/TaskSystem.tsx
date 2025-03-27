@@ -29,7 +29,13 @@ export class Task {
   }
 }
 
-export function TaskMaster() {
+// Import date selection from higher up UI components
+export function TaskMaster({filter_date}:any) {
+   // Setup which dates are currently viewed
+   let startOfDay = filter_date.setHours(0, 0, 0);
+   let endOfDay = filter_date.setHours(23, 59, 59);
+
+
   const [showEditor, setShowEditor] = useState(false);
   const [showActive, setShowActive] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
