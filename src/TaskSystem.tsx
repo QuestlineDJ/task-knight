@@ -82,7 +82,7 @@ export function TaskMaster() {
 
   return (
     <div>
-      <div className="enemy-container">
+      <div>
         Health: {enemyHealth}
         {enemyHealth > 0 && <img src={redDot} alt="Enemy Indicator" />}
       </div>
