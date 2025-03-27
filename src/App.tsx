@@ -1,12 +1,19 @@
+<<<<<<< HEAD
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import SaveWindow from './Components/SaveWindow';
+=======
+import Message from "./Message";
+import BackgroundGrid from "./ReactComponents/BackgroundGrid";
+import Background from "./assets/Task Knight Assets/Background Assets/background_plains.png";
+>>>>>>> parent of 65f4c14 (Basic Ass task board)
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
+<<<<<<< HEAD
     <div className="App">
       <div>
         <a href="https://vitejs.dev" target="_blank">
@@ -29,6 +36,10 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+=======
+    <div>
+      <BackgroundGrid></BackgroundGrid>
+>>>>>>> parent of 65f4c14 (Basic Ass task board)
     </div>
   )
 }
