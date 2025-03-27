@@ -1,10 +1,20 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import "bootstrap/dist/css/bootstrap.css";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './index.css'
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
-);
+  </React.StrictMode>,
+)
+
+const beforeUnloadHandler = (event: any) => {
+  // Recommended
+  event.preventDefault();
+
+  // Included for legacy support, e.g. Chrome/Edge < 119
+  event.returnValue = true;
+};
+
+window.addEventListener("beforeunload", beforeUnloadHandler);
