@@ -63,6 +63,18 @@ export function TaskMaster() {
     }
 
     var newActiveTasks = activeTasks.concat([task]);
+    newActiveTasks.sort((a, b)=>{
+      if ( a.due_time != b.due_time ) {
+         return a.due_time < b.due_time ? -1 : 1;
+      } else {
+         if ( a.priority != b.priority ) {
+            return a.priority > b.priority ? -1 : 1;
+         } else {
+            return 0;
+         }
+      }
+   })
+
     setActiveTasks(newActiveTasks);
     setShowEditor(false);
   }
