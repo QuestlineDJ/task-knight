@@ -1,6 +1,11 @@
 import { useState, useId } from "react";
-import redDot from "./reddot.png";
+import redDot from ".images/reddot.png";
+import orangeDot from "./images/orangedot.png";
+import yellowDot from "./images/yellowdot.png";
+
 import "./App.css";
+
+const images = [redDot, orangeDot, yellowDot];
 
 function get_current_time(): number {
   return Math.floor(Date.now() / 1000);
@@ -28,12 +33,28 @@ export function TaskMaster() {
   const [showEditor, setShowEditor] = useState(false);
   const [showActive, setShowActive] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
-  const [enemyHealth, setEnemyHealth] = useState<number>(100); // *BROOKE* Set's enemy health to 100
+  const [enemyHealth, setEnemyHealth] = useState<number>(100);
+  const [currentImage, setCurrentImage] = useState(0);
 
   const [editTask, setEditTask] = useState(new Task("", 0, get_current_time()));
 
   const [activeTasks, setActiveTasks] = useState(Array<Task>);
   const [completeTasks, setCompleteTasks] = useState(Array<Task>);
+
+  function damageEnemy() {
+    setEnemyHealth((prev) => {
+      const newHealth = Math.max(0, prev - 10);
+      console.log("Updated Health: ", newHealth);
+
+      if (newHealth === 0 && currentImage < images.length - 1) {
+        setTimeout(() => {
+          setCurrentImage((prevIndex) => prevIndex + 1);
+          setEnemyHealth(100);
+        }, 500);
+      }
+      return newHealth;
+    });
+  }
 
   function handleSave(task: Task) {
     if (activeTasks.find((element) => element.id == task.id) != undefined) {
@@ -74,11 +95,7 @@ export function TaskMaster() {
       newCompleteTasks = newCompleteTasks.slice(0, newCompleteTasks.length - 1);
     }
 
-    setEnemyHealth((prev) => {
-      const newHealth = Math.max(0, prev - 10);
-      console.log("Updated Enemy Health ", newHealth);
-      return newHealth;
-    }); // *BROOKE* minus health by 10
+    damageEnemy();
 
     setActiveTasks(newActiveTasks);
     setCompleteTasks(newCompleteTasks);
@@ -86,12 +103,14 @@ export function TaskMaster() {
 
   return (
     <div>
-      <div className="enemy-container">
+      <div>
         <p>Health: {enemyHealth}</p>
         {enemyHealth > 0 ? (
-          <img src={redDot} alt="Enemy Indicator" />
+          <img src={images[currentImage]} alt="Enemy Indicator" />
+        ) : currentImage < images.length - 1 ? (
+          <p>Next enemy coming up....</p>
         ) : (
-          <p>Enemy Defeated</p>
+          <p>All enemies defeated!</p>
         )}
       </div>
 
