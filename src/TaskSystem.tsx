@@ -74,11 +74,7 @@ export function TaskMaster() {
       newCompleteTasks = newCompleteTasks.slice(0, newCompleteTasks.length - 1);
     }
 
-    setEnemyHealth((prev) => {
-      const newHealth = Math.max(0, prev - 10);
-      console.log("Updated Enemy HealthL ", newHealth);
-      return newHealth;
-    }); // *BROOKE* minus health by 10
+    setEnemyHealth((prev) => Math.max(0, prev - 10)); // *BROOKE* minus health by 10
 
     setActiveTasks(newActiveTasks);
     setCompleteTasks(newCompleteTasks);
@@ -87,12 +83,8 @@ export function TaskMaster() {
   return (
     <div>
       <div className="enemy-container">
-        <p>Health: {enemyHealth}</p>
-        {enemyHealth > 0 ? (
-          <img src={redDot} alt="Enemy Indicator" />
-        ) : (
-          <p>Enemy Defeated</p>
-        )}
+        Health: {enemyHealth}
+        {enemyHealth > 0 && <img src={redDot} alt="Enemy Indicator" />}
       </div>
 
       <button type="button" onClick={() => setShowActive(!showActive)}>
