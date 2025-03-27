@@ -82,6 +82,10 @@ export function TaskMaster() {
     setShowEditor(true);
   }
 
+   function cancel_editor() {
+      setShowEditor(false)
+   }
+
   function complete_task(taskid: number) {
     var completed_task = activeTasks.find((element) => element.id == taskid);
     if (completed_task == undefined) {
@@ -128,7 +132,7 @@ export function TaskMaster() {
       >
         Create New Task
       </button>
-      <TaskForm callback={handleSave} task={editTask} active={showEditor} />
+      <TaskForm callback={handleSave} task={editTask} active={showEditor} cancel_callback={cancel_editor}/>
       <TaskList
         name="Active Tasks"
         action={true}
@@ -225,7 +229,7 @@ function TaskDisplay({
   );
 }
 
-function TaskForm({ callback, task, active }: any) {
+function TaskForm({ callback, task, active, cancel_callback }: any) {
   if (active == false) {
     return <></>;
   }
@@ -294,6 +298,12 @@ function TaskForm({ callback, task, active }: any) {
         }}
       >
         Save
+      </button>
+      <button
+         type="button"
+         onClick={cancel_callback}
+      >
+         Cancel
       </button>
     </div>
   );
