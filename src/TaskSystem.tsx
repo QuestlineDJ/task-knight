@@ -63,6 +63,12 @@ export function TaskMaster({filter_date}:any) {
   }
 
   function handleSave(task: Task) {
+    // Do not save tasks with no names
+   if ( task.name == "" ) {
+      setShowEditor(false);
+      return;
+   }
+
     if (activeTasks.find((element) => element.id == task.id) != undefined) {
       setShowEditor(false);
       return;

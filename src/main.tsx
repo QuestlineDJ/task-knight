@@ -5,6 +5,7 @@ import EnemyDamage from "./EnemyDamage";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <TaskMaster />
+    <TaskMaster 
+      filter_date={new Date()}/>
   </React.StrictMode>
 );
