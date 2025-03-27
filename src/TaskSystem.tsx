@@ -76,7 +76,7 @@ export function TaskMaster() {
 
     setEnemyHealth((prev) => {
       const newHealth = Math.max(0, prev - 10);
-      console.log("Updated Enemy HealthL ", newHealth);
+      console.log("Updated Enemy Health ", newHealth);
       return newHealth;
     }); // *BROOKE* minus health by 10
 
