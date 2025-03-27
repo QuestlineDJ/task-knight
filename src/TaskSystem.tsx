@@ -44,8 +44,9 @@ export function TaskMaster({filter_date}:any) {
 
   const [editTask, setEditTask] = useState(new Task("", 0, get_current_time()));
 
-  const [activeTasks, setActiveTasks] = useState(Array<Task>);
-  const [completeTasks, setCompleteTasks] = useState(Array<Task>);
+  const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
+  const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
+  const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(new Array());
 
   function damageEnemy() {
     setEnemyHealth((prev) => {
