@@ -4,14 +4,9 @@ import Background from "./assets/Task Knight Assets/Background Assets/background
 
 function App() {
   return (
-    <section
-      className="backgournd"
-      style={{ backgroundImage: `url(${Background} )` }}
-    >
-      <div>
-        <Message></Message>
-      </div>
-    </section>
+    <div>
+      <BackgroundGrid></BackgroundGrid>
+    </div>
   );
 }
 
