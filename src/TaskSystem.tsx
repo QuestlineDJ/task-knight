@@ -114,10 +114,10 @@ function createOverdueList(array: Array<Task>) : Array<Task> {
 
 // Import date selection from higher up UI components
 export function TaskMaster() {
-   // timeout peroid in milliseconds
-   // Multiple by 60 to get seconds
-   // Multiple by 1000 to get milliseconds
-   const overdue_check_timeout = 5 * 60 * 1000;
+
+   // Refresh overdue task list
+   // TODO: figure out optimium time
+   const overdue_check_timeout = 30 * 1000;
 
   const [showEditor, setShowEditor] = useState(false);
   const [showActive, setShowActive] = useState(false);
@@ -154,6 +154,10 @@ export function TaskMaster() {
       return newHealth;
     });
   }
+
+   setTimeout(() => {
+      setOverdueTasks(createOverdueList(activeTasks));
+   }, overdue_check_timeout);
 
   function handleSave(task: Task) {
     // Do not save tasks with no names
