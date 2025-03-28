@@ -29,6 +29,33 @@ export class Task {
   }
 }
 
+function computeFieldDate(date: Date, have_seconds = false) : string {
+   // Ugly but \_o_/
+   var due_time_year = date.getFullYear().toString().padStart(4, "0");
+   var due_time_month = (date.getMonth() + 1)
+     .toString()
+     .padStart(2, "0");
+   var due_time_day = date.getDate().toString().padStart(2, "0");
+   var due_time_hour = date.getHours().toString().padStart(2, "0");
+   var due_time_minute = date.getMinutes().toString().padStart(2, "0");
+
+   var composed_time =
+     due_time_year +
+     "-" +
+     due_time_month +
+     "-" +
+     due_time_day;
+
+   if ( have_seconds ) {
+     composed_time += "T" +
+        due_time_hour +
+        ":" +
+        due_time_minute;
+   }
+
+   return composed_time;
+}
+
 function sortByPriority(array: Array<Task>) : Array<Task> {
    // Copy array into new object
    var newArray = [...array];
@@ -207,7 +234,7 @@ export function TaskMaster() {
          type="button"
          onClick={() => setShowTodayTasks(!showTodayTasks)}
       >
-         Toggle Today's Tasks
+         Toggle Day Tasks
       </button>
       <button type="button" onClick={() => setShowActive(!showActive)}>
         Toggle Active Tasks
@@ -222,7 +249,7 @@ export function TaskMaster() {
         }}
       >
         Create New Task
-      </button>
+      </button><hr/>
       <span>
          Sort by:
          <select
@@ -231,7 +258,15 @@ export function TaskMaster() {
             <option value="P">Priority</option>
             <option value="H">Due Date</option>
          </select>
-      </span>
+      </span><br/>
+      <span>
+         View Tasks on day:
+         <input 
+            type="date"
+            value={computeFieldDate(filterDate)}
+            onChange={(e) =>{setFilterDate(new Date(e.target.value))}}
+         /> 
+      </span><hr/>
       <TaskForm callback={handleSave} task={editTask} active={showEditor} cancel_callback={cancel_editor}/>
       <TaskList
          name={filterName}
@@ -345,28 +380,7 @@ function TaskForm({ callback, task, active, cancel_callback }: any) {
 
   const [name, setName] = useState(task.name);
   const [priority, setPriority] = useState(task.priority);
-
-  // Ugly but \_o_/
-  var due_time_raw = new Date(task.due_time * 1000);
-  var due_time_year = due_time_raw.getFullYear().toString().padStart(4, "0");
-  var due_time_month = (due_time_raw.getMonth() + 1)
-    .toString()
-    .padStart(2, "0");
-  var due_time_day = due_time_raw.getDate().toString().padStart(2, "0");
-  var due_time_hour = due_time_raw.getHours().toString().padStart(2, "0");
-  var due_time_minute = due_time_raw.getMinutes().toString().padStart(2, "0");
-
-  var composed_time =
-    due_time_year +
-    "-" +
-    due_time_month +
-    "-" +
-    due_time_day +
-    "T" +
-    due_time_hour +
-    ":" +
-    due_time_minute;
-  const [due, setDue] = useState(composed_time);
+  const [due, setDue] = useState(computeFieldDate(new Date(task.due_time * 1000), true));
 
   return (
     <div>
