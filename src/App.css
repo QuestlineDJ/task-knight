@@ -40,3 +40,17 @@
 .read-the-docs {
   color: #888;
 }
+
+.enemy-container {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100px;
+  height: auto;
+}
+
+.enemy-container image {
+  width: 50px;
+  height: auto;
+}
