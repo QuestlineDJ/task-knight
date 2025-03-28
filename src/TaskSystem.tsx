@@ -29,6 +29,37 @@ export class Task {
   }
 }
 
+function sortByPriority(array: Array<Task>) : Array<Task> {
+   // Copy array into new object
+   var newArray = [...array];
+   newArray.sort((a,b) =>{
+      if ( a.priority != b.priority ) {
+         return a.priority > b.priority ? -1 : 1;
+      } else if ( a.due_time != b.due_time ) {
+         return a.due_time < b.due_time ? -1 : 1; 
+      } else {
+         return 0;
+      }
+   });
+
+   return newArray;
+}
+
+function sortByDueDate(array: Array<Task>) : Array<Task> {
+   var newArray = [...array];
+   newArray.sort((a, b) => {
+      if ( a.due_time != b.due_time ) {
+         return a.due_time < b.due_time ? -1 : 1;
+      } else if ( a.priority != b.priority ) {
+         return a.priority > b.priority ? -1 : 1;
+      } else {
+         return 0;
+      }
+   });
+
+   return newArray;
+}
+
 // Import date selection from higher up UI components
 export function TaskMaster() {
   const [showEditor, setShowEditor] = useState(false);
@@ -38,6 +69,7 @@ export function TaskMaster() {
   const [currentImage, setCurrentImage] = useState(0);
 
   const [editTask, setEditTask] = useState(new Task("", 0, get_current_time()));
+  const [prioritySort, setPrioritySort] = useState(true);
 
   const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
   const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
@@ -71,17 +103,11 @@ export function TaskMaster() {
     }
 
     var newActiveTasks = activeTasks.concat([task]);
-    newActiveTasks.sort((a, b)=>{
-      if ( a.due_time != b.due_time ) {
-         return a.due_time < b.due_time ? -1 : 1;
-      } else {
-         if ( a.priority != b.priority ) {
-            return a.priority > b.priority ? -1 : 1;
-         } else {
-            return 0;
-         }
-      }
-   })
+    if ( prioritySort ) {
+      newActiveTasks = sortByPriority(newActiveTasks);
+   } else {
+      newActiveTasks = sortByDueDate(newActiveTasks);
+   }
 
     setActiveTasks(newActiveTasks);
     setShowEditor(false);
@@ -125,6 +151,18 @@ export function TaskMaster() {
     setCompleteTasks(newCompleteTasks);
   }
 
+   // Do not know the event type
+   function updateSorting(e:any) {
+      var sort = e.target.value == "P";
+      if ( sort ) {
+         var newActiveTasks = sortByPriority(activeTasks);
+      } else {
+         var newActiveTasks = sortByDueDate(activeTasks);
+      }
+      setPrioritySort(sort);
+      setActiveTasks(newActiveTasks);
+   }
+
   return (
     <div>
       <div>
@@ -152,6 +190,15 @@ export function TaskMaster() {
       >
         Create New Task
       </button>
+      <span>
+         Sort by:
+         <select
+            value={prioritySort ? "P" : "H"}
+            onChange={e => updateSorting(e)}>
+            <option value="P">Priority</option>
+            <option value="H">Due Date</option>
+         </select>
+      </span>
       <TaskForm callback={handleSave} task={editTask} active={showEditor} cancel_callback={cancel_editor}/>
       <TaskList
         name="Active Tasks"
