@@ -60,10 +60,29 @@ function sortByDueDate(array: Array<Task>) : Array<Task> {
    return newArray;
 }
 
+function getTimeSeconds(date: Date) : number {
+   return Math.floor(date.getTime() / 1000);
+}
+
+function createFilterTasks(array: Array<Task>, day: Date) : Array<Task> {
+   var startTime = new Date(day.getTime());
+   startTime.setHours(0, 0, 0);
+
+   var endTime = new Date(day.getTime());
+   endTime.setHours(23, 59, 59);
+
+   return array.filter((element) =>{
+      console.log(getTimeSeconds(startTime) < element.due_time && element.due_time <= getTimeSeconds(endTime))
+      return getTimeSeconds(startTime) < element.due_time && element.due_time <= getTimeSeconds(endTime);
+   });
+
+}
+
 // Import date selection from higher up UI components
 export function TaskMaster() {
   const [showEditor, setShowEditor] = useState(false);
   const [showActive, setShowActive] = useState(false);
+   const [showTodayTasks, setShowTodayTasks] = useState(true);
   const [showComplete, setShowComplete] = useState(false);
   const [enemyHealth, setEnemyHealth] = useState<number>(100);
   const [currentImage, setCurrentImage] = useState(0);
@@ -74,6 +93,11 @@ export function TaskMaster() {
   const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
   const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
   const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(new Array());
+
+  const [filterDate, setFilterDate] = useState(new Date());
+  const [ filterTasks, setFilterTasks ] = useState(createFilterTasks(activeTasks, filterDate))
+
+   let filterName = filterDate.toLocaleDateString() + " Tasks";
 
   function damageEnemy() {
     setEnemyHealth((prev) => {
@@ -110,6 +134,7 @@ export function TaskMaster() {
    }
 
     setActiveTasks(newActiveTasks);
+    setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setShowEditor(false);
   }
 
@@ -121,6 +146,7 @@ export function TaskMaster() {
   function delete_task(taskid: number) {
     var newActiveTasks = activeTasks.filter((task) => task.id != taskid);
     setActiveTasks(newActiveTasks);
+    setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
   }
 
   function new_task() {
@@ -144,6 +170,8 @@ export function TaskMaster() {
     if (newCompleteTasks.length > 100) {
       newCompleteTasks = newCompleteTasks.slice(0, newCompleteTasks.length - 1);
     }
+
+    setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
 
     damageEnemy();
 
@@ -175,7 +203,12 @@ export function TaskMaster() {
           <p>All enemies defeated!</p>
         )}
       </div>
-
+      <button
+         type="button"
+         onClick={() => setShowTodayTasks(!showTodayTasks)}
+      >
+         Toggle Today's Tasks
+      </button>
       <button type="button" onClick={() => setShowActive(!showActive)}>
         Toggle Active Tasks
       </button>
@@ -200,6 +233,15 @@ export function TaskMaster() {
          </select>
       </span>
       <TaskForm callback={handleSave} task={editTask} active={showEditor} cancel_callback={cancel_editor}/>
+      <TaskList
+         name={filterName}
+         action={true}
+         active={showTodayTasks}
+         tasks={filterTasks}
+         delete_handle={delete_task}
+         edit_handle={set_edit_task}
+         complete_handle={complete_task}
+      />
       <TaskList
         name="Active Tasks"
         action={true}
