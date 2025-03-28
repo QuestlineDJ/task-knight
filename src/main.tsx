@@ -8,3 +8,14 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <TaskMaster/>
   </React.StrictMode>
 );
+
+
+const beforeUnloadHandler = (event: any) => {
+  // Recommended
+  event.preventDefault();
+
+  // Included for legacy support, e.g. Chrome/Edge < 119
+  event.returnValue = true;
+};
+
+window.addEventListener("beforeunload", beforeUnloadHandler);
