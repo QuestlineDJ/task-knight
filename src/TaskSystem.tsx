@@ -99,17 +99,31 @@ function createFilterTasks(array: Array<Task>, day: Date) : Array<Task> {
    endTime.setHours(23, 59, 59);
 
    return array.filter((element) =>{
-      console.log(getTimeSeconds(startTime) < element.due_time && element.due_time <= getTimeSeconds(endTime))
       return getTimeSeconds(startTime) < element.due_time && element.due_time <= getTimeSeconds(endTime);
    });
 
 }
 
+function createOverdueList(array: Array<Task>) : Array<Task> {
+   var now = getTimeSeconds(new Date());
+
+   return array.filter((element) =>{
+      return now > element.due_time; 
+   });
+}
+
 // Import date selection from higher up UI components
 export function TaskMaster() {
+   // timeout peroid in milliseconds
+   // Multiple by 60 to get seconds
+   // Multiple by 1000 to get milliseconds
+   const overdue_check_timeout = 5 * 60 * 1000;
+
   const [showEditor, setShowEditor] = useState(false);
   const [showActive, setShowActive] = useState(false);
    const [showTodayTasks, setShowTodayTasks] = useState(true);
+   const [showOverdue, setShowOverdue] = useState(true);
+
   const [showComplete, setShowComplete] = useState(false);
   const [enemyHealth, setEnemyHealth] = useState<number>(100);
   const [currentImage, setCurrentImage] = useState(0);
@@ -119,7 +133,7 @@ export function TaskMaster() {
 
   const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
   const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
-  const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(new Array());
+  const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(createOverdueList(activeTasks));
 
   const [filterDate, setFilterDate] = useState(new Date());
   const [ filterTasks, setFilterTasks ] = useState(createFilterTasks(activeTasks, filterDate))
@@ -162,6 +176,7 @@ export function TaskMaster() {
 
     setActiveTasks(newActiveTasks);
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
+    setOverdueTasks(createOverdueList(newActiveTasks))
     setShowEditor(false);
   }
 
@@ -174,6 +189,7 @@ export function TaskMaster() {
     var newActiveTasks = activeTasks.filter((task) => task.id != taskid);
     setActiveTasks(newActiveTasks);
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
+    setOverdueTasks(createOverdueList(newActiveTasks));
   }
 
   function new_task() {
@@ -199,6 +215,7 @@ export function TaskMaster() {
     }
 
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
+    setOverdueTasks(createOverdueList(newActiveTasks));
 
     damageEnemy();
 
@@ -230,6 +247,12 @@ export function TaskMaster() {
           <p>All enemies defeated!</p>
         )}
       </div>
+      <button
+         type="button"
+         onClick={() => setShowOverdue(!showOverdue)}
+      >
+         Toggle Overdue Tasks
+      </button>
       <button
          type="button"
          onClick={() => setShowTodayTasks(!showTodayTasks)}
@@ -268,6 +291,15 @@ export function TaskMaster() {
          /> 
       </span><hr/>
       <TaskForm callback={handleSave} task={editTask} active={showEditor} cancel_callback={cancel_editor}/>
+      <TaskList
+         name="Overdue Tasks"
+         action={true}
+         active={showOverdue}
+         tasks={overdueTasks}
+         delete_handle={delete_task}
+         edit_handle={set_edit_task}
+         complete_handle={complete_task} 
+      />
       <TaskList
          name={filterName}
          action={true}
