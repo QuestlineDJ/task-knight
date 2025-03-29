@@ -14,6 +14,9 @@ import {
    createOverdueList
 } from './TaskUtilities'
 
+import { TaskForm } from './TaskForm'
+import { TaskDisplay } from './TaskDisplay'
+
 import "./index.css"
 
 const images = [redDot, orangeDot, yellowDot];
@@ -270,106 +273,4 @@ function TaskList({
   );
 }
 
-function TaskDisplay({
-  task,
-  action,
-  delete_handle,
-  edit_handle,
-  complete_handle,
-}: any) {
-  let action_buttons = (
-    <span>
-      <button
-        type="button"
-        onClick={() => {
-          edit_handle(task);
-        }}
-      >
-        E
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          complete_handle(task.id);
-        }}
-      >
-        C
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          delete_handle(task.id);
-        }}
-      >
-        D
-      </button>
-    </span>
-  );
 
-  return (
-    <div>
-      <span>{task.name}</span>,<span>{task.priority}</span>,
-      <span>{task.due_time}</span>
-      {action == true ? action_buttons : null}
-    </div>
-  );
-}
-
-function TaskForm({ callback, task, active, cancel_callback }: any) {
-  if (active == false) {
-    return <></>;
-  }
-
-  const [name, setName] = useState(task.name);
-  const [priority, setPriority] = useState(task.priority);
-  const [due, setDue] = useState(computeFieldDate(new Date(task.due_time * 1000), true));
-
-  return (
-    <div>
-      <label>
-        Name:{" "}
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Priority:{" "}
-        <input
-          type="number"
-          value={priority}
-          onChange={(e) => setPriority(Number(e.target.value))}
-        />
-      </label>
-      <br />
-      <label>
-        Due Date:{" "}
-        <input
-          type="datetime-local"
-          value={due}
-          onChange={(e) => setDue(e.target.value)}
-        />
-      </label>
-      <br />
-      <button
-        type="button"
-        onClick={() => {
-          task.name = name;
-          task.priority = priority;
-          task.due_time = Math.floor(Date.parse(due) / 1000);
-          callback(task);
-        }}
-      >
-        Save
-      </button>
-      <button
-         type="button"
-         onClick={cancel_callback}
-      >
-         Cancel
-      </button>
-    </div>
-  );
-}
