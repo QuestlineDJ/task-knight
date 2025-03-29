@@ -49,12 +49,12 @@ export function TaskMaster() {
   const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
   const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
 
+ // React state that determines which day to filter for
+  const [filterDate, setFilterDate] = useState(new Date());
+
   // React state the hold a view of tasks
   const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(createOverdueList(activeTasks));
   const [ filterTasks, setFilterTasks ] = useState(createFilterTasks(activeTasks, filterDate))
-
- // React state that determines which day to filter for
-  const [filterDate, setFilterDate] = useState(new Date());
 
   // The name for the filtered tasks
    let filterName = filterDate.toLocaleDateString() + " Tasks";
