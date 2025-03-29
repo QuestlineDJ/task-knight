@@ -15,7 +15,7 @@ import {
 } from './TaskUtilities'
 
 import { TaskForm } from './TaskForm'
-import { TaskDisplay } from './TaskDisplay'
+import { TaskList } from './TaskList'
 
 import "./index.css"
 
@@ -240,37 +240,3 @@ export function TaskMaster() {
     </div>
   );
 }
-
-function TaskList({
-  name,
-  action,
-  active,
-  tasks,
-  delete_handle,
-  edit_handle,
-  complete_handle,
-}: any) {
-  if (active != true) {
-    return <></>;
-  }
-
-  const list_of_tasks = tasks.map((task: Task) => (
-    <TaskDisplay
-      key={task.id}
-      task={task}
-      action={action}
-      delete_handle={delete_handle}
-      edit_handle={edit_handle}
-      complete_handle={complete_handle}
-    />
-  ));
-
-  return (
-    <div>
-      <h1>{name}</h1>
-      <div>{list_of_tasks}</div>
-    </div>
-  );
-}
-
-

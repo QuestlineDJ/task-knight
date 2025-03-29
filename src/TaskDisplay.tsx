@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Task } from './TaskUtilities'
 
 /**
  * Create react component that display a task
