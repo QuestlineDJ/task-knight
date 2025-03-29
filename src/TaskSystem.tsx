@@ -28,25 +28,35 @@ export function TaskMaster() {
    // TODO: figure out optimium time
    const overdue_check_timeout = 30 * 1000;
 
+  // React state variables that control showing certain task lists
   const [showEditor, setShowEditor] = useState(false);
   const [showActive, setShowActive] = useState(false);
-   const [showTodayTasks, setShowTodayTasks] = useState(true);
-   const [showOverdue, setShowOverdue] = useState(true);
-
+  const [showTodayTasks, setShowTodayTasks] = useState(true);
+  const [showOverdue, setShowOverdue] = useState(true);
   const [showComplete, setShowComplete] = useState(false);
+
+  // React state variables that control enemy
   const [enemyHealth, setEnemyHealth] = useState<number>(100);
   const [currentImage, setCurrentImage] = useState(0);
 
+  // React state that hold the current task in the TaskForm
   const [editTask, setEditTask] = useState(new Task("", 0, getCurrentTime()));
+
+  // React state that deterines what sorting to do on tasks
   const [prioritySort, setPrioritySort] = useState(true);
 
+  // React state for non-dupelicate tasks lists
   const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
   const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
-  const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(createOverdueList(activeTasks));
 
-  const [filterDate, setFilterDate] = useState(new Date());
+  // React state the hold a view of tasks
+  const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(createOverdueList(activeTasks));
   const [ filterTasks, setFilterTasks ] = useState(createFilterTasks(activeTasks, filterDate))
 
+ // React state that determines which day to filter for
+  const [filterDate, setFilterDate] = useState(new Date());
+
+  // The name for the filtered tasks
    let filterName = filterDate.toLocaleDateString() + " Tasks";
 
   function damageEnemy() {
@@ -64,10 +74,16 @@ export function TaskMaster() {
     });
   }
 
+  // Set a refresh peroid to detech tasks to become overdue
    setTimeout(() => {
       setOverdueTasks(createOverdueList(activeTasks));
    }, overdue_check_timeout);
 
+  /**
+   * A function that handles saving a task from the TaskForm into task lists
+   *
+   * @param task - The task to be saved from TaskForm
+   */ 
   function handleSave(task: Task) {
     // Do not save tasks with no names
    if ( task.name == "" ) {
@@ -75,29 +91,42 @@ export function TaskMaster() {
       return;
    }
 
+    // No need to insert a task that already exists, i.g., when editing tasks that exist
     if (activeTasks.find((element) => element.id == task.id) != undefined) {
       setShowEditor(false);
       return;
     }
 
+   // Add task to active task list
     var newActiveTasks = activeTasks.concat([task]);
+
+   // Sort task based on user preference
     if ( prioritySort ) {
       newActiveTasks = sortByPriority(newActiveTasks);
    } else {
       newActiveTasks = sortByDueDate(newActiveTasks);
    }
 
+   // Update react states
     setActiveTasks(newActiveTasks);
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setOverdueTasks(createOverdueList(newActiveTasks))
     setShowEditor(false);
   }
 
+ /**
+  * Set the editTask and show the editor
+  *
+  * @param task - the task to edit, can be either pre-existing or new
+  */
   function set_edit_task(task: Task) {
     setEditTask(task);
     setShowEditor(true);
   }
 
+  /**
+   * Deletes a task from lists and refreshs react states
+   */
   function delete_task(taskid: number) {
     var newActiveTasks = activeTasks.filter((task) => task.id != taskid);
     setActiveTasks(newActiveTasks);
@@ -105,21 +134,32 @@ export function TaskMaster() {
     setOverdueTasks(createOverdueList(newActiveTasks));
   }
 
+  /**
+   * Creates new task and shows the editor
+   */
   function new_task() {
     setEditTask(new Task("", 0, getCurrentTime()));
     setShowEditor(true);
   }
 
+   /**
+    * Cancels the adding of the task by hiding the editor
+    */
    function cancel_editor() {
       setShowEditor(false)
    }
 
+  /**
+   * Completes a task by moving it from activeTasks to completeTasks. Updates associated dervied task lists
+   */
   function complete_task(taskid: number) {
+   // Ensure the task we are trying to complete exists
     var completed_task = activeTasks.find((element) => element.id == taskid);
     if (completed_task == undefined) {
       return;
     }
 
+    // Transfer tasks from active to complete
     var newActiveTasks = activeTasks.filter((task) => task.id != taskid);
     var newCompleteTasks = [completed_task].concat(completeTasks);
 
@@ -127,6 +167,7 @@ export function TaskMaster() {
       newCompleteTasks = newCompleteTasks.slice(0, newCompleteTasks.length - 1);
     }
 
+    //Update dervied task lists
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setOverdueTasks(createOverdueList(newActiveTasks));
 
@@ -136,8 +177,12 @@ export function TaskMaster() {
     setCompleteTasks(newCompleteTasks);
   }
 
-   // Do not know the event type
-   function updateSorting(e:any) {
+   /**
+    * A function which updates react states when user changes sort by priorty
+    *
+    * @param e - change event generated by react when changing form select element
+    */
+   function updateSorting(e: React.ChangeEvent<HTMLSelectElement>) {
       var sort = e.target.value == "P";
       if ( sort ) {
          var newActiveTasks = sortByPriority(activeTasks);
@@ -184,9 +229,7 @@ export function TaskMaster() {
       </button>
       <button
         type="button"
-        onClick={() => {
-          new_task();
-        }}
+        onClick={() => new_task()}
       >
         Create New Task
       </button><hr/>
