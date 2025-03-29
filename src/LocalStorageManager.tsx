@@ -119,6 +119,11 @@ export function LoadFile(event: React.ChangeEvent<HTMLInputElement>) {
         }
     };
 
+    if ( !fileInput.files ) {
+      console.error("NUll file detected");
+      return;
+    }
+
     //Have the reader start reading the first file inputted. Ignore all other files.
     reader.readAsText(fileInput.files[0]);
 }
