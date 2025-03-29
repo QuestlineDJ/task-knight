@@ -146,6 +146,10 @@ export function TaskMaster() {
       }
       setPrioritySort(sort);
       setActiveTasks(newActiveTasks);
+
+       setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
+       setOverdueTasks(createOverdueList(newActiveTasks));
+
    }
 
   return (
@@ -214,7 +218,7 @@ export function TaskMaster() {
          complete_handle={complete_task} 
       />
       <TaskList
-         name={filterName}
+         name={filterName /* TaskList for task for a certain day*/}
          action={true}
          active={showTodayTasks}
          tasks={filterTasks}
