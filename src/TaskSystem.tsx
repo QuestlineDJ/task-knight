@@ -119,24 +119,24 @@ export function TaskMaster() {
    // TODO: figure out optimium time
    const overdue_check_timeout = 30 * 1000;
 
-  const [showEditor, setShowEditor] = useState(false);
-  const [showActive, setShowActive] = useState(false);
+   const [showEditor, setShowEditor] = useState(false);
+   const [showActive, setShowActive] = useState(false);
    const [showTodayTasks, setShowTodayTasks] = useState(true);
    const [showOverdue, setShowOverdue] = useState(true);
 
-  const [showComplete, setShowComplete] = useState(false);
-  const [enemyHealth, setEnemyHealth] = useState<number>(100);
-  const [currentImage, setCurrentImage] = useState(0);
+   const [showComplete, setShowComplete] = useState(false);
+   const [enemyHealth, setEnemyHealth] = useState<number>(100);
+   const [currentImage, setCurrentImage] = useState(0);
 
-  const [editTask, setEditTask] = useState(new Task("", 0, get_current_time()));
-  const [prioritySort, setPrioritySort] = useState(true);
+   const [editTask, setEditTask] = useState(new Task("", 0, get_current_time()));
+   const [prioritySort, setPrioritySort] = useState(true);
 
-  const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
-  const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
-  const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(createOverdueList(activeTasks));
+   const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
+   const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
+   const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(createOverdueList(activeTasks));
 
-  const [filterDate, setFilterDate] = useState(new Date());
-  const [ filterTasks, setFilterTasks ] = useState(createFilterTasks(activeTasks, filterDate))
+   const [filterDate, setFilterDate] = useState(new Date());
+   const [ filterTasks, setFilterTasks ] = useState(createFilterTasks(activeTasks, filterDate))
 
    let filterName = filterDate.toLocaleDateString() + " Tasks";
 

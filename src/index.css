@@ -94,7 +94,6 @@ button:focus-visible {
 
 .open-screen-button {
   position: fixed;
-
   bottom: 12px;
   right: 10px;
 }
