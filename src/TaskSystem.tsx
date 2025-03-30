@@ -41,6 +41,9 @@ export function TaskMaster() {
   // React state variables that control gold given to the user
   const [currentGoldAmount, setCurrentGoldAmount] = useState<number>(0);
 
+  // React state variable that controls the players damage
+  const [damageAmount, setDamageAmount] = useState<number>(10);
+
   // React state that hold the current task in the TaskForm
   const [editTask, setEditTask] = useState(new Task("", 0, getCurrentTime()));
 
@@ -65,6 +68,19 @@ export function TaskMaster() {
   // The name for the filtered tasks
   let filterName = filterDate.toLocaleDateString() + " Tasks";
 
+  function increasePlayerDamage() {
+    if (currentGoldAmount > 10) {
+      setDamageAmount((prev) => prev + 10);
+      setCurrentGoldAmount((prevGold) => prevGold - 10);
+      console.log(
+        "Increased damage by 10. New damage amount: ",
+        damageAmount + 10
+      );
+    } else {
+      console.log("Not enough gold");
+    }
+  }
+
   function giveGold() {
     setCurrentGoldAmount((prev) => {
       const newGold = Math.max(0, prev + 10);
@@ -75,10 +91,10 @@ export function TaskMaster() {
 
   function damageEnemy() {
     setEnemyHealth((prev) => {
-      const newHealth = Math.max(0, prev - 10);
+      const newHealth = Math.max(0, prev - damageAmount);
       console.log("Updated Health: ", newHealth);
 
-      if (newHealth === 0 && currentImage < images.length - 1) {
+      if (newHealth === 0 && currentImage < images.length) {
         setTimeout(() => {
           setCurrentImage((prevIndex) => prevIndex + 1);
           setEnemyHealth(100);
@@ -217,7 +233,9 @@ export function TaskMaster() {
         <p>Health: {enemyHealth}</p>
         <p>Gold: {currentGoldAmount}</p>
         <p>
-          <button type="button">Increase Damage +10: Requires 10 Gold</button>
+          <button type="button" onClick={increasePlayerDamage}>
+            Increase Damage +10: Requires 10 Gold
+          </button>
         </p>
         {enemyHealth > 0 ? (
           <img src={images[currentImage]} alt="Enemy Indicator" />
