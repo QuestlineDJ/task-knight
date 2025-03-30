@@ -2,7 +2,6 @@ import { useState, useId } from "react";
 import redDot from "./images/reddot.png";
 import orangeDot from "./images/orangedot.png";
 import yellowDot from "./images/yellowdot.png";
-
 import { 
    Task,
    getTimeSeconds,

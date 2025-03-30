@@ -1,7 +1,7 @@
-import {SaveFile} from '../LocalStorageManager';
+import {saveFile} from '../LocalStorageManager';
 
 function SaveButton() {
-    return <button onClick={SaveFile}>Save to File</button>
+    return <button onClick={saveFile}>Save to File</button>
 }
 
 export default SaveButton;
