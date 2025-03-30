@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import SaveButton from './SaveButton';
-import LoadButton from './LoadButton';
-import { LoadFile } from '../LocalStorageManager';
+import { loadFile } from '../LocalStorageManager';
 
 function SaveWindow() {
     const [isOpen, setOpen] = useState(false);
@@ -16,7 +15,7 @@ function SaveWindow() {
                     <h2>TEST</h2>
                 </div>
                 <li className='button'><SaveButton/></li>
-                <input type="file" accept='.txt' className='button' onChange={LoadFile}></input>
+                <input type="file" accept='.txt' className='button' onChange={loadFile}></input>
             </div>
         </div>
         ) : null}

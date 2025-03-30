@@ -3,16 +3,16 @@ import redDot from "./images/reddot.png";
 import orangeDot from "./images/orangedot.png";
 import yellowDot from "./images/yellowdot.png";
 
-import {
-  Task,
-  getTimeSeconds,
-  getCurrentTime,
-  computeFieldDate,
-  sortByPriority,
-  sortByDueDate,
-  createFilterTasks,
-  createOverdueList,
-} from "./TaskUtilities";
+import { 
+   Task,
+   getTimeSeconds,
+   getCurrentTime,
+   computeFieldDate,
+   sortByPriority,
+   sortByDueDate,
+   createFilterTasks,
+   createOverdueList
+} from './TaskUtilities'
 
 import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";

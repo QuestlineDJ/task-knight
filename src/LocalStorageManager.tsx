@@ -15,14 +15,16 @@
  * Author: Ryan Herwig
  */
 
-const IS_DEBUGGING = true;
+import { loadTasks } from "./TaskUtilities";
+
+const IS_DEBUGGING = false;
 
 /**
  * Creates a cookie with a specified name and value
  * @param {string} name The name of the cookie to create
  * @param {string} value The value to be stored inside the cookie
  */
-export function SetLocalStorage(key: string, value: string) {
+export function setLocalStorage(key: string, value: string) {
     localStorage.setItem(key, value);
 }
 
@@ -31,40 +33,47 @@ export function SetLocalStorage(key: string, value: string) {
  * @param {string} cookie_name - the key of the cookie
  * @returns string - the value inside the key
  */
-export function GetLocalStorage(key: string) {
+export function getLocalStorage(key: string) {
     if (key != "HashData" || IS_DEBUGGING) //Reserved Word
         return localStorage.getItem(key);
     else
         return "";
 }
 
-export function GetAllLocalStorage() {
+export function getAllLocalStorage() {
     var data = "";
     //Loops through the local storage contents
     for (var i = 0; i < localStorage.length; i++) {
         //If key is not null
         if (localStorage.key(i) != "null" && (localStorage.key(i) != "HashData" || IS_DEBUGGING)) {
             //Adds string to data
-            data += localStorage.key(i) + "=" + GetLocalStorage(localStorage.key(i) as string) + ";";
+            data += localStorage.key(i) + "=" + getLocalStorage(localStorage.key(i) as string) + ";";
         }
     }
     return data;
 }
 
+export function deleteItemLocalStorage(key: string)
+{
+    if (getLocalStorage(key) != "" && getLocalStorage(key) != null)
+        localStorage.removeItem(key);
+}
+
 /**
  * Deletes ALL local storage related to this webpage
  */
-export function DeleteLocalStorage() {
+export function deleteAllLocalStorage() {
     localStorage.clear();
 }
 
 /**
  * Saves the local storage data into a txt file and downloads it onto the computer
  */
-export function SaveFile() {
+export function saveFile() {
     //Data
-    var data = GetAllLocalStorage();
-    data = Encrypt();
+    var data = getAllLocalStorage();
+    console.log(data);
+    data = encrypt();
     //Converts the data to a plain text Blob
     //A blob is a raw data type that is immutable. It can be read as binary or as text and can be converted into a ReadableStream.
     var dataToBlob = new Blob([data], { type: "text/plain" });
@@ -94,7 +103,7 @@ export function SaveFile() {
 /**
  * Loads the file selected onto the local storage
  */
-export function LoadFile(event: React.ChangeEvent<HTMLInputElement>) {
+export function loadFile(event: React.ChangeEvent<HTMLInputElement>) {
     //Gets the input from the chosen file
     var fileInput = event.target;
 
@@ -105,20 +114,21 @@ export function LoadFile(event: React.ChangeEvent<HTMLInputElement>) {
     reader.onload = function () {
         //Grabs the read data
         var data = reader.result as string;
-        data = Decyrpt(data);
+        data = decyrpt(data);
         if (data != "") {
             //Loops forever until a semicolon is not found
             while (data.indexOf(";") != -1) {
                 //Creates local storage data from text file
-                data = EditLocalStorageFromFile(data);
+                data = editLocalStorageFromFile(data);
             }
-            //Creates one more local storage data for last one
-            EditLocalStorageFromFile(data);
 
-            console.log(GetAllLocalStorage());
+            console.log(getAllLocalStorage());
+
+            //Tells Task System to reload its tasks
+            loadTasks();
         }
     };
-
+    
     if ( !fileInput.files ) {
       console.error("NUll file detected");
       return;
@@ -132,7 +142,7 @@ export function LoadFile(event: React.ChangeEvent<HTMLInputElement>) {
  * Creates local storage data from a certain string format
  * This is a helper method, thus this should ONLY be called by LoadFile(event).
  */
-function EditLocalStorageFromFile(data: string) {
+function editLocalStorageFromFile(data: string) {
     //Nullifies leading white space
     while (data.charAt(0) == " ") {
         data = data.substring(1);
@@ -151,7 +161,7 @@ function EditLocalStorageFromFile(data: string) {
         value = data.substring(indexOfEqualsSign + 1, indexOfSemiColon);
     //No semicolons left
     else value = data.substring(indexOfEqualsSign + 1);
-    SetLocalStorage(name, value);
+    setLocalStorage(name, value);
 
     data = data.substring(indexOfSemiColon + 1);
     return data;
@@ -170,13 +180,13 @@ const keyLength = keyWord.length;
 //Loops back to beginning when it reaches the end
 const saltAmountArray = [1, 2, 3, 4, 5];
 
-function Encrypt() {
+function encrypt() {
     //Gets the data from the storage
-    var plainText = GetAllLocalStorage();
+    var plainText = getAllLocalStorage();
     console.log("Plain Text: " + plainText);
 
     //Creates Vigenere Cipher using keyWord
-    var cipherAlphabets = CreateCipherAlphabets();
+    var cipherAlphabets = createCipherAlphabets();
 
     var encyrptedText = "";
     var beforeSaltEncyrptedText = "";
@@ -243,19 +253,19 @@ function Encrypt() {
 
     //Increases hash value by added letter's value
     hashValue = Math.round((hashValue + addedValue) * 100) / 100;
-    SetLocalStorage("HashData", hashValue as any as string);
+    setLocalStorage("HashData", hashValue as any as string);
 
     if (IS_DEBUGGING) {
-        console.log(GetAllLocalStorage());
+        console.log(getAllLocalStorage());
         console.log("Hash Data = " + hashValue);
     }
 
     return encyrptedText;
 }
 
-function Decyrpt(text: string) {
+function decyrpt(text: string) {
     //Gets the cipherAlphabet
-    var cipherAlphabets = CreateCipherAlphabets();
+    var cipherAlphabets = createCipherAlphabets();
 
     //Hashes encyrpted text
     var hashValue = 0;
@@ -320,7 +330,7 @@ function Decyrpt(text: string) {
     return plaintext;
 }
 
-function CreateCipherAlphabets() {
+function createCipherAlphabets() {
     //Creates Alphabets
     var cipherAlphabets = [];
 
