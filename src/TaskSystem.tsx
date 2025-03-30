@@ -216,7 +216,9 @@ export function TaskMaster() {
       <div>
         <p>Health: {enemyHealth}</p>
         <p>Gold: {currentGoldAmount}</p>
-        <button type="button">Increase Damage +10: Requires 10 Gold</button>
+        <p>
+          <button type="button">Increase Damage +10: Requires 10 Gold</button>
+        </p>
         {enemyHealth > 0 ? (
           <img src={images[currentImage]} alt="Enemy Indicator" />
         ) : currentImage < images.length - 1 ? (
