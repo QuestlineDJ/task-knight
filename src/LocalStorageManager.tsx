@@ -15,7 +15,6 @@
  * Author: Ryan Herwig
  */
 
-import { loadTasks } from "./TaskUtilities";
 
 const IS_DEBUGGING = false;
 
@@ -40,16 +39,23 @@ export function getLocalStorage(key: string) {
         return "";
 }
 
-export function getAllLocalStorage() {
-    var data = "";
-    //Loops through the local storage contents
+// TODO: talk with Ryan about possibility of this implementation
+export function getAllMappedLocalStorage() : Map<string, string> {
+   var data = new Map();
+
     for (var i = 0; i < localStorage.length; i++) {
         //If key is not null
         if (localStorage.key(i) != "null" && (localStorage.key(i) != "HashData" || IS_DEBUGGING)) {
-            //Adds string to data
-            data += localStorage.key(i) + "=" + getLocalStorage(localStorage.key(i) as string) + ";";
+            data.set(localStorage.key(i), getLocalStorage(localStorage.key(i) as string));
         }
     }
+
+   return data;
+}
+
+export function getAllLocalStorage() {
+    var data = "";
+    //Loops through the local storage contents
     return data;
 }
 
@@ -125,7 +131,7 @@ export function loadFile(event: React.ChangeEvent<HTMLInputElement>) {
             console.log(getAllLocalStorage());
 
             //Tells Task System to reload its tasks
-            loadTasks();
+            // TODO: implement loading of a file
         }
     };
     
