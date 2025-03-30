@@ -3,16 +3,21 @@ import redDot from "./images/reddot.png";
 import orangeDot from "./images/orangedot.png";
 import yellowDot from "./images/yellowdot.png";
 
-import {
-  Task,
-  getTimeSeconds,
-  getCurrentTime,
-  computeFieldDate,
-  sortByPriority,
-  sortByDueDate,
-  createFilterTasks,
-  createOverdueList,
-} from "./TaskUtilities";
+import { 
+   Task,
+   getTimeSeconds,
+   getCurrentTime,
+   computeFieldDate,
+   sortByPriority,
+   sortByDueDate,
+   createFilterTasks,
+   createOverdueList,
+   TaskType,
+   saveTaskToStorage,
+   deleteTaskInStorage,
+   getActiveTasksFromStorage,
+   getCompleteTasksFromStorage
+} from './TaskUtilities'
 
 import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";
@@ -51,8 +56,8 @@ export function TaskMaster() {
   const [prioritySort, setPrioritySort] = useState(true);
 
   // React state for non-dupelicate tasks lists
-  const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
-  const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
+  const [activeTasks, setActiveTasks] = useState<Array<Task>>(getActiveTasksFromStorage);
+  const [completeTasks, setCompleteTasks] = useState<Array<Task>>(getCompleteTasksFromStorage);
 
   // React state that determines which day to filter for
   const [filterDate, setFilterDate] = useState(new Date());
@@ -125,6 +130,8 @@ export function TaskMaster() {
     // No need to insert a task that already exists, i.g., when editing tasks that exist
     if (activeTasks.find((element) => element.id == task.id) != undefined) {
       setShowEditor(false);
+      saveTaskToStorage(task, TaskType.Active);
+      //TODO: update dervied lists from edited element
       return;
     }
 
@@ -143,6 +150,8 @@ export function TaskMaster() {
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setOverdueTasks(createOverdueList(newActiveTasks));
     setShowEditor(false);
+
+    saveTaskToStorage(task, TaskType.Active);
   }
 
   /**
@@ -160,6 +169,9 @@ export function TaskMaster() {
    */
   function delete_task(taskid: number) {
     var newActiveTasks = activeTasks.filter((task) => task.id != taskid);
+
+    deleteTaskInStorage(taskid, TaskType.Active);
+
     setActiveTasks(newActiveTasks);
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setOverdueTasks(createOverdueList(newActiveTasks));
@@ -195,7 +207,10 @@ export function TaskMaster() {
     var newCompleteTasks = [completed_task].concat(completeTasks);
 
     if (newCompleteTasks.length > 100) {
+      var task_to_delete = newCompleteTasks[newCompleteTasks.length - 1];
       newCompleteTasks = newCompleteTasks.slice(0, newCompleteTasks.length - 1);
+
+      deleteTaskInStorage(task_to_delete.id, TaskType.Complete);
     }
 
     //Update dervied task lists
@@ -206,6 +221,9 @@ export function TaskMaster() {
 
     setActiveTasks(newActiveTasks);
     setCompleteTasks(newCompleteTasks);
+
+    deleteTaskInStorage(completed_task.id, TaskType.Active);
+    saveTaskToStorage(completed_task, TaskType.Complete);
   }
 
   /**
