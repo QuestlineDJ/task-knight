@@ -69,7 +69,7 @@ export function TaskMaster() {
   let filterName = filterDate.toLocaleDateString() + " Tasks";
 
   function increasePlayerDamage() {
-    if (currentGoldAmount > 10) {
+    if (currentGoldAmount >= 10) {
       setDamageAmount((prev) => prev + 10);
       setCurrentGoldAmount((prevGold) => prevGold - 10);
       console.log(
