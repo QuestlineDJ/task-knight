@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import App from './App'
 import { TaskMaster } from "./TaskSystem";
-import App from "./App";
 import SaveWindow from './Components/SaveWindow';
 import EnemyDamage from "./EnemyDamage";
 import './index.css'

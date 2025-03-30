@@ -3,114 +3,23 @@ import redDot from "./images/reddot.png";
 import orangeDot from "./images/orangedot.png";
 import yellowDot from "./images/yellowdot.png";
 
-import "./App.css";
+import { 
+   Task,
+   getTimeSeconds,
+   getCurrentTime,
+   computeFieldDate,
+   sortByPriority,
+   sortByDueDate,
+   createFilterTasks,
+   createOverdueList
+} from './TaskUtilities'
+
+import { TaskForm } from './TaskForm'
+import { TaskList } from './TaskList'
+
+import "./index.css"
 
 const images = [redDot, orangeDot, yellowDot];
-
-function get_current_time(): number {
-  return Math.floor(Date.now() / 1000);
-}
-
-export class Task {
-  id: number;
-  name: string;
-  priority: number;
-  creation_time: number;
-  due_time: number;
-  done_time: number;
-
-  constructor(name: string, priority: number, due_time: number) {
-    this.id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-    this.name = name;
-    this.priority = priority;
-    this.creation_time = get_current_time();
-    this.due_time = due_time;
-    this.done_time = 0;
-  }
-}
-
-function computeFieldDate(date: Date, have_seconds = false) : string {
-   // Ugly but \_o_/
-   var due_time_year = date.getFullYear().toString().padStart(4, "0");
-   var due_time_month = (date.getMonth() + 1)
-     .toString()
-     .padStart(2, "0");
-   var due_time_day = date.getDate().toString().padStart(2, "0");
-   var due_time_hour = date.getHours().toString().padStart(2, "0");
-   var due_time_minute = date.getMinutes().toString().padStart(2, "0");
-
-   var composed_time =
-     due_time_year +
-     "-" +
-     due_time_month +
-     "-" +
-     due_time_day;
-
-   if ( have_seconds ) {
-     composed_time += "T" +
-        due_time_hour +
-        ":" +
-        due_time_minute;
-   }
-
-   return composed_time;
-}
-
-function sortByPriority(array: Array<Task>) : Array<Task> {
-   // Copy array into new object
-   var newArray = [...array];
-   newArray.sort((a,b) =>{
-      if ( a.priority != b.priority ) {
-         return a.priority > b.priority ? -1 : 1;
-      } else if ( a.due_time != b.due_time ) {
-         return a.due_time < b.due_time ? -1 : 1; 
-      } else {
-         return 0;
-      }
-   });
-
-   return newArray;
-}
-
-function sortByDueDate(array: Array<Task>) : Array<Task> {
-   var newArray = [...array];
-   newArray.sort((a, b) => {
-      if ( a.due_time != b.due_time ) {
-         return a.due_time < b.due_time ? -1 : 1;
-      } else if ( a.priority != b.priority ) {
-         return a.priority > b.priority ? -1 : 1;
-      } else {
-         return 0;
-      }
-   });
-
-   return newArray;
-}
-
-function getTimeSeconds(date: Date) : number {
-   return Math.floor(date.getTime() / 1000);
-}
-
-function createFilterTasks(array: Array<Task>, day: Date) : Array<Task> {
-   var startTime = new Date(day.getTime());
-   startTime.setHours(0, 0, 0);
-
-   var endTime = new Date(day.getTime());
-   endTime.setHours(23, 59, 59);
-
-   return array.filter((element) =>{
-      return getTimeSeconds(startTime) < element.due_time && element.due_time <= getTimeSeconds(endTime);
-   });
-
-}
-
-function createOverdueList(array: Array<Task>) : Array<Task> {
-   var now = getTimeSeconds(new Date());
-
-   return array.filter((element) =>{
-      return now > element.due_time; 
-   });
-}
 
 // Import date selection from higher up UI components
 export function TaskMaster() {
@@ -119,25 +28,35 @@ export function TaskMaster() {
    // TODO: figure out optimium time
    const overdue_check_timeout = 30 * 1000;
 
-   const [showEditor, setShowEditor] = useState(false);
-   const [showActive, setShowActive] = useState(false);
-   const [showTodayTasks, setShowTodayTasks] = useState(true);
-   const [showOverdue, setShowOverdue] = useState(true);
+  // React state variables that control showing certain task lists
+  const [showEditor, setShowEditor] = useState(false);
+  const [showActive, setShowActive] = useState(false);
+  const [showTodayTasks, setShowTodayTasks] = useState(true);
+  const [showOverdue, setShowOverdue] = useState(true);
+  const [showComplete, setShowComplete] = useState(false);
 
-   const [showComplete, setShowComplete] = useState(false);
-   const [enemyHealth, setEnemyHealth] = useState<number>(100);
-   const [currentImage, setCurrentImage] = useState(0);
+  // React state variables that control enemy
+  const [enemyHealth, setEnemyHealth] = useState<number>(100);
+  const [currentImage, setCurrentImage] = useState(0);
 
-   const [editTask, setEditTask] = useState(new Task("", 0, get_current_time()));
-   const [prioritySort, setPrioritySort] = useState(true);
+  // React state that hold the current task in the TaskForm
+  const [editTask, setEditTask] = useState(new Task("", 0, getCurrentTime()));
 
-   const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
-   const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
-   const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(createOverdueList(activeTasks));
+  // React state that deterines what sorting to do on tasks
+  const [prioritySort, setPrioritySort] = useState(true);
 
-   const [filterDate, setFilterDate] = useState(new Date());
-   const [ filterTasks, setFilterTasks ] = useState(createFilterTasks(activeTasks, filterDate))
+  // React state for non-dupelicate tasks lists
+  const [activeTasks, setActiveTasks] = useState<Array<Task>>(new Array());
+  const [completeTasks, setCompleteTasks] = useState<Array<Task>>(new Array());
 
+ // React state that determines which day to filter for
+  const [filterDate, setFilterDate] = useState(new Date());
+
+  // React state the hold a view of tasks
+  const [overdueTasks, setOverdueTasks] = useState<Array<Task>>(createOverdueList(activeTasks));
+  const [ filterTasks, setFilterTasks ] = useState(createFilterTasks(activeTasks, filterDate))
+
+  // The name for the filtered tasks
    let filterName = filterDate.toLocaleDateString() + " Tasks";
 
   function damageEnemy() {
@@ -155,10 +74,16 @@ export function TaskMaster() {
     });
   }
 
+  // Set a refresh peroid to detech tasks to become overdue
    setTimeout(() => {
       setOverdueTasks(createOverdueList(activeTasks));
    }, overdue_check_timeout);
 
+  /**
+   * A function that handles saving a task from the TaskForm into task lists
+   *
+   * @param task - The task to be saved from TaskForm
+   */ 
   function handleSave(task: Task) {
     // Do not save tasks with no names
    if ( task.name == "" ) {
@@ -166,29 +91,42 @@ export function TaskMaster() {
       return;
    }
 
+    // No need to insert a task that already exists, i.g., when editing tasks that exist
     if (activeTasks.find((element) => element.id == task.id) != undefined) {
       setShowEditor(false);
       return;
     }
 
+   // Add task to active task list
     var newActiveTasks = activeTasks.concat([task]);
+
+   // Sort task based on user preference
     if ( prioritySort ) {
       newActiveTasks = sortByPriority(newActiveTasks);
    } else {
       newActiveTasks = sortByDueDate(newActiveTasks);
    }
 
+   // Update react states
     setActiveTasks(newActiveTasks);
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setOverdueTasks(createOverdueList(newActiveTasks))
     setShowEditor(false);
   }
 
+ /**
+  * Set the editTask and show the editor
+  *
+  * @param task - the task to edit, can be either pre-existing or new
+  */
   function set_edit_task(task: Task) {
     setEditTask(task);
     setShowEditor(true);
   }
 
+  /**
+   * Deletes a task from lists and refreshs react states
+   */
   function delete_task(taskid: number) {
     var newActiveTasks = activeTasks.filter((task) => task.id != taskid);
     setActiveTasks(newActiveTasks);
@@ -196,21 +134,32 @@ export function TaskMaster() {
     setOverdueTasks(createOverdueList(newActiveTasks));
   }
 
+  /**
+   * Creates new task and shows the editor
+   */
   function new_task() {
-    setEditTask(new Task("", 0, get_current_time()));
+    setEditTask(new Task("", 0, getCurrentTime()));
     setShowEditor(true);
   }
 
+   /**
+    * Cancels the adding of the task by hiding the editor
+    */
    function cancel_editor() {
       setShowEditor(false)
    }
 
+  /**
+   * Completes a task by moving it from activeTasks to completeTasks. Updates associated dervied task lists
+   */
   function complete_task(taskid: number) {
+   // Ensure the task we are trying to complete exists
     var completed_task = activeTasks.find((element) => element.id == taskid);
     if (completed_task == undefined) {
       return;
     }
 
+    // Transfer tasks from active to complete
     var newActiveTasks = activeTasks.filter((task) => task.id != taskid);
     var newCompleteTasks = [completed_task].concat(completeTasks);
 
@@ -218,6 +167,7 @@ export function TaskMaster() {
       newCompleteTasks = newCompleteTasks.slice(0, newCompleteTasks.length - 1);
     }
 
+    //Update dervied task lists
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setOverdueTasks(createOverdueList(newActiveTasks));
 
@@ -227,8 +177,12 @@ export function TaskMaster() {
     setCompleteTasks(newCompleteTasks);
   }
 
-   // Do not know the event type
-   function updateSorting(e:any) {
+   /**
+    * A function which updates react states when user changes sort by priorty
+    *
+    * @param e - change event generated by react when changing form select element
+    */
+   function updateSorting(e: React.ChangeEvent<HTMLSelectElement>) {
       var sort = e.target.value == "P";
       if ( sort ) {
          var newActiveTasks = sortByPriority(activeTasks);
@@ -237,6 +191,10 @@ export function TaskMaster() {
       }
       setPrioritySort(sort);
       setActiveTasks(newActiveTasks);
+
+       setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
+       setOverdueTasks(createOverdueList(newActiveTasks));
+
    }
 
   return (
@@ -271,9 +229,7 @@ export function TaskMaster() {
       </button>
       <button
         type="button"
-        onClick={() => {
-          new_task();
-        }}
+        onClick={() => new_task()}
       >
         Create New Task
       </button><hr/>
@@ -305,7 +261,7 @@ export function TaskMaster() {
          complete_handle={complete_task} 
       />
       <TaskList
-         name={filterName}
+         name={filterName /* TaskList for task for a certain day*/}
          action={true}
          active={showTodayTasks}
          tasks={filterTasks}
@@ -328,142 +284,6 @@ export function TaskMaster() {
         active={showComplete}
         tasks={completeTasks}
       />
-    </div>
-  );
-}
-
-function TaskList({
-  name,
-  action,
-  active,
-  tasks,
-  delete_handle,
-  edit_handle,
-  complete_handle,
-}: any) {
-  if (active != true) {
-    return <></>;
-  }
-
-  const list_of_tasks = tasks.map((task: Task) => (
-    <TaskDisplay
-      key={task.id}
-      task={task}
-      action={action}
-      delete_handle={delete_handle}
-      edit_handle={edit_handle}
-      complete_handle={complete_handle}
-    />
-  ));
-
-  return (
-    <div>
-      <h1>{name}</h1>
-      <div>{list_of_tasks}</div>
-    </div>
-  );
-}
-
-function TaskDisplay({
-  task,
-  action,
-  delete_handle,
-  edit_handle,
-  complete_handle,
-}: any) {
-  let action_buttons = (
-    <span>
-      <button
-        type="button"
-        onClick={() => {
-          edit_handle(task);
-        }}
-      >
-        E
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          complete_handle(task.id);
-        }}
-      >
-        C
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          delete_handle(task.id);
-        }}
-      >
-        D
-      </button>
-    </span>
-  );
-
-  return (
-    <div>
-      <span>{task.name}</span>,<span>{task.priority}</span>,
-      <span>{task.due_time}</span>
-      {action == true ? action_buttons : null}
-    </div>
-  );
-}
-
-function TaskForm({ callback, task, active, cancel_callback }: any) {
-  if (active == false) {
-    return <></>;
-  }
-
-  const [name, setName] = useState(task.name);
-  const [priority, setPriority] = useState(task.priority);
-  const [due, setDue] = useState(computeFieldDate(new Date(task.due_time * 1000), true));
-
-  return (
-    <div>
-      <label>
-        Name:{" "}
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Priority:{" "}
-        <input
-          type="number"
-          value={priority}
-          onChange={(e) => setPriority(Number(e.target.value))}
-        />
-      </label>
-      <br />
-      <label>
-        Due Date:{" "}
-        <input
-          type="datetime-local"
-          value={due}
-          onChange={(e) => setDue(e.target.value)}
-        />
-      </label>
-      <br />
-      <button
-        type="button"
-        onClick={() => {
-          task.name = name;
-          task.priority = priority;
-          task.due_time = Math.floor(Date.parse(due) / 1000);
-          callback(task);
-        }}
-      >
-        Save
-      </button>
-      <button
-         type="button"
-         onClick={cancel_callback}
-      >
-         Cancel
-      </button>
     </div>
   );
 }
