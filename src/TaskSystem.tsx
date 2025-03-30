@@ -65,6 +65,14 @@ export function TaskMaster() {
   // The name for the filtered tasks
   let filterName = filterDate.toLocaleDateString() + " Tasks";
 
+  function giveGold() {
+    setCurrentGoldAmount((prev) => {
+      const newGold = Math.max(0, prev + 10);
+      console.log("Updated Gold:", newGold);
+      return newGold;
+    });
+  }
+
   function damageEnemy() {
     setEnemyHealth((prev) => {
       const newHealth = Math.max(0, prev - 10);
@@ -74,17 +82,10 @@ export function TaskMaster() {
         setTimeout(() => {
           setCurrentImage((prevIndex) => prevIndex + 1);
           setEnemyHealth(100);
+          giveGold();
         }, 500);
       }
       return newHealth;
-    });
-  }
-
-  function giveGold() {
-    setCurrentGoldAmount((prev) => {
-      const newGold = Math.max(0, prev + 10);
-      console.log("Updated Gold:", newGold);
-      return newGold;
     });
   }
 
@@ -186,7 +187,6 @@ export function TaskMaster() {
     setOverdueTasks(createOverdueList(newActiveTasks));
 
     damageEnemy();
-    giveGold();
 
     setActiveTasks(newActiveTasks);
     setCompleteTasks(newCompleteTasks);
@@ -216,6 +216,7 @@ export function TaskMaster() {
       <div>
         <p>Health: {enemyHealth}</p>
         <p>Gold: {currentGoldAmount}</p>
+        <button type="button">Increase Damage +10: Requires 10 Gold</button>
         {enemyHealth > 0 ? (
           <img src={images[currentImage]} alt="Enemy Indicator" />
         ) : currentImage < images.length - 1 ? (
