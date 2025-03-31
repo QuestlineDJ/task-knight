@@ -31,7 +31,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
 
-  background-image: url("/background_plains.png");
+  background-image: url("${process.env.PUBLIC_URL}/background_plains.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
