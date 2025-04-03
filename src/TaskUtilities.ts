@@ -1,4 +1,4 @@
-import { deleteItemLocalStorage, deleteAllLocalStorage, getAllLocalStorage } from "./LocalStorageManager";
+import { setLocalStorage, getLocalStorage, getAllMappedLocalStorage, deleteItemLocalStorage } from "./LocalStorageManager";
 
 export class Task {
    id: number;
@@ -17,8 +17,8 @@ export class Task {
     *
     * @returns A constructed task object
     */
-   constructor(name: string, priority: number, due_time: number) {
-      this.id = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+   constructor(name: string, priority: number, due_time: number, taskid = 0) {
+      this.id = (taskid === 0 ? Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) : taskid);
       this.name = name;
       this.priority = priority;
       this.creation_time = getCurrentTime();
@@ -27,91 +27,105 @@ export class Task {
    }
 }
 
-function setTask(task: Task, id: number, name: string, priority: number, creation_time: number, due_time: number, done_time: number) {
-   task.id = id;
-   task.name = name;
-   task.priority = priority;
-   task.creation_time = creation_time;
-   task.due_time = due_time;
-   task.done_time = done_time;
-}
-
-
-
-export function loadTasks() {
-   //TODO - Delete all previous tasks
-
-   //Grabs the local storage data
-   //NOTE - During final build, make sure IS_DEBUGGING is set to false in the LocalStorageManager script
-   var data = getAllLocalStorage();
-
-   if (data != "") {
-      //Loops forever until a semicolon is not found
-      while (data.indexOf(";") != -1) {
-         //Creates local storage data from text file
-         data = loadDataToTaskSystem(data);
-      }
-
-      console.log(getAllLocalStorage());
-   }
+/**
+ * Interface for use when storing tasks in local storage
+ */
+interface TaskStorage {
+   name: string;
+   priority: number;
+   creation_time: number;
+   due_time: number;
 }
 
 /**
- * Creates Tasks from local storage data
- * This is a helper method, thus this should ONLY be called by loadTasks();
+ * Enum used for parameters in local storage saving functions
  */
-function loadDataToTaskSystem(data: string) {
-    //Nullifies leading white space
-    while (data.charAt(0) == " ") {
-        data = data.substring(1);
-    }
+export const enum TaskType {
+   Active,
+   Complete
+}
 
-    //Gets crucial indexes
-    var indexOfEqualsSign = data.indexOf("=");
-    var indexOfSemiColon = data.indexOf(";");
+/**
+ * Generate key value for local storage
+ *
+ * @param task - The taskid to generate the key from
+ * @param type - The type of task it is
+ *
+ * @returns A unqiue string key based on task type and task id
+ */
+function generateStorageKey(taskid: number, type: TaskType) : string {
+   return ( type == TaskType.Active ? "active" : "complete" ) + "." + String(taskid);
+}
 
-    //String concatenation - Grabs ID
-    var id = data.substring(0, indexOfEqualsSign);
-    var value = ""; // Grabs the Value in the (Key, Value) pair in local storage
+/**
+ * Saves a task into local storage. Also works for tasks that have been edited
+ *
+ * @param task - the task to save
+ * @param type - whether the task is active or complete
+ */
+export function saveTaskToStorage(task: Task, type: TaskType) {
+   var storage = {
+      name: task.name,
+      priority: task.priority,
+      creation_time: task.creation_time,
+      due_time: task.due_time
+   };
 
-    //If there is a semicolon remaining
-    if (indexOfSemiColon != -1)
-        value = data.substring(indexOfEqualsSign + 1, indexOfSemiColon);
-    //No semicolons left
-    else value = data.substring(indexOfEqualsSign + 1);
+   setLocalStorage(generateStorageKey(task.id, type), JSON.stringify(storage));
+}
 
-    //TODO - test it lol
+/**
+ * Deletes a task in localstorage
+ *
+ * @param task - the task to delete
+ * @param type - the type of task it is
+ */
+export function deleteTaskInStorage(taskid: number, type: TaskType) {
+   deleteItemLocalStorage(generateStorageKey(taskid, type));
+}
 
-    //Grabs name
-    var barIndex = value.indexOf("|");
-    var name = value.substring(0, barIndex);
-    value = value.substring(barIndex + 1);
+/**
+ * Retrives all tasks in local storage that are active and returns them as an array
+ *
+ * @returns An array of active tasks
+ */
+export function getActiveTasksFromStorage() : Array<Task> {
+   var allData = getAllMappedLocalStorage();
+   var activeTasks = new Array();
 
-    //Grabs priority
-    barIndex = value.indexOf("|");
-    var priority = value.substring(0, barIndex);
-    value = value.substring(barIndex + 1);
+   allData.forEach((value, key) =>{
+      if ( key.startsWith("active.") ) {
+         // Discard prefix
+         var taskid = Number(key.slice("active.".length));
+         var data: TaskStorage  = JSON.parse(value);
 
-    //Grabs creation time
-    barIndex = value.indexOf("|");
-    var creation_time = value.substring(0, barIndex);
-    value = value.substring(barIndex + 1);
+         activeTasks.push(new Task(data.name, data.priority, data.due_time, taskid));
+      }
+   });
 
-    //Grabs due time
-    barIndex = value.indexOf("|");
-    var due_time = value.substring(0, barIndex);
-    value = value.substring(barIndex + 1);
+   return activeTasks;
+}
 
-    //Grabs done time
-    barIndex = value.indexOf("|");
-    var done_time = value.substring(0, barIndex);
-    value = value.substring(barIndex + 1);
+/**
+ * Retrives all tasks in local storage that are complete and returns them as an array
+ *
+ * @returns An array of complete tasks
+ */
+export function getCompleteTasksFromStorage() : Array<Task> {
+   var allData = getAllMappedLocalStorage();
+   var completeTasks = new Array();
 
-    //TODO - Set new Task here!
-    // setTask(task, id as any as number, name, priority as any as number, creation_time as any as number, due_time as any as number, done_time as any as number);
+   allData.forEach((value, key) =>{
+      if ( key.startsWith("complete.") ) {
+         // Discard prefix
+         var taskid = Number(key.slice("complete.".length));
+         var data: TaskStorage  = JSON.parse(value);
 
-    data = data.substring(indexOfSemiColon + 1);
-    return data;
+         completeTasks.push(new Task(data.name, data.priority, data.due_time, taskid));
+      }
+   });
+
+   return completeTasks;
 }
 
 /**
@@ -230,7 +244,6 @@ export function createFilterTasks(array: Array<Task>, day: Date): Array<Task> {
    var endTime = new Date(day.getTime());
    endTime.setHours(23, 59, 59);
    return array.filter((element) => {
-      localStorage.setItem(element.id as any as string, element.name + "|" + element.priority + "|" + element.creation_time + "|" + element.due_time + "|" + element.done_time);
       return getTimeSeconds(startTime) < element.due_time && element.due_time <= getTimeSeconds(endTime);
    });
 
@@ -246,8 +259,6 @@ export function createFilterTasks(array: Array<Task>, day: Date): Array<Task> {
 export function createOverdueList(array: Array<Task>): Array<Task> {
    var now = getTimeSeconds(new Date());
    return array.filter((element) => {
-      deleteItemLocalStorage(element.id as any as string);
-      localStorage.setItem("~" + element.id as any as string, element.name + "|" + element.priority + "|" + element.creation_time + "|" + element.due_time + "|" + element.done_time);
       return now > element.due_time;
    });
 }
