@@ -2,7 +2,7 @@ import { useState, useId } from "react";
 import redDragon from "./images/boss_dragon.png";
 import blueDragon from "./images/boss_dragon_blue.png";
 import purpleDragon from "./images/boss_dragon_purple.png";
-
+import { setLocalStorage } from "./LocalStorageManager";
 import {
   Task,
   getTimeSeconds,
@@ -86,6 +86,7 @@ export function TaskMaster() {
         "Increased damage by 10. New damage amount: ",
         damageAmount + 10
       );
+      setLocalStorage("currentDamage", damageAmount as any as string);
     } else {
       console.log("Not enough gold");
     }
@@ -95,6 +96,7 @@ export function TaskMaster() {
     setCurrentGoldAmount((prev) => {
       const newGold = Math.max(0, prev + 10);
       console.log("Updated Gold:", newGold);
+      setLocalStorage("gold", newGold as any as string);
       return newGold;
     });
   }
@@ -111,6 +113,7 @@ export function TaskMaster() {
           giveGold();
         }, 500);
       }
+      setLocalStorage("bossHealth", newHealth as any as string);
       return newHealth;
     });
   }

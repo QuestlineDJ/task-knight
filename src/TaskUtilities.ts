@@ -244,9 +244,9 @@ export function createFilterTasks(array: Array<Task>, day: Date): Array<Task> {
    var endTime = new Date(day.getTime());
    endTime.setHours(23, 59, 59);
    return array.filter((element) => {
+      
       return getTimeSeconds(startTime) < element.due_time && element.due_time <= getTimeSeconds(endTime);
    });
-
 }
 
 /**

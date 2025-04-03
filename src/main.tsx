@@ -1,23 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import { TaskMaster } from "./TaskSystem";
-import EnemyDamage from "./EnemyDamage";
-import Background from "./Background";
+import "./main.css";
+import SaveWindow from "./Components/SaveWindow";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <div className="Container">
-      <div className="App">
-        <App />
+      <div className="main">
+        <SaveWindow />
       </div>
 
       <div className="tasks">
         <TaskMaster />
-      </div>
-
-      <div>
-        <Background></Background>
       </div>
     </div>
   </React.StrictMode>
