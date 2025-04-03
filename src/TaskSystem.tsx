@@ -1,23 +1,23 @@
 import { useState, useId } from "react";
-import redDot from "./images/reddot.png";
-import orangeDot from "./images/orangedot.png";
-import yellowDot from "./images/yellowdot.png";
+import redDragon from "./images/boss_dragon.png";
+import blueDragon from "./images/boss_dragon_blue.png";
+import purpleDragon from "./images/boss_dragon_purple.png";
 
-import { 
-   Task,
-   getTimeSeconds,
-   getCurrentTime,
-   computeFieldDate,
-   sortByPriority,
-   sortByDueDate,
-   createFilterTasks,
-   createOverdueList,
-   TaskType,
-   saveTaskToStorage,
-   deleteTaskInStorage,
-   getActiveTasksFromStorage,
-   getCompleteTasksFromStorage
-} from './TaskUtilities'
+import {
+  Task,
+  getTimeSeconds,
+  getCurrentTime,
+  computeFieldDate,
+  sortByPriority,
+  sortByDueDate,
+  createFilterTasks,
+  createOverdueList,
+  TaskType,
+  saveTaskToStorage,
+  deleteTaskInStorage,
+  getActiveTasksFromStorage,
+  getCompleteTasksFromStorage,
+} from "./TaskUtilities";
 
 
 import { TaskForm } from "./TaskForm";
@@ -25,7 +25,7 @@ import { TaskList } from "./TaskList";
 
 import "./index.css";
 
-const images = [redDot, orangeDot, yellowDot];
+const images = [redDragon, blueDragon, purpleDragon];
 
 // Import date selection from higher up UI components
 export function TaskMaster() {
@@ -37,7 +37,7 @@ export function TaskMaster() {
   const [showEditor, setShowEditor] = useState(false);
   const [showActive, setShowActive] = useState(false);
   const [showTodayTasks, setShowTodayTasks] = useState(true);
-  const [showOverdue, setShowOverdue] = useState(true);
+  const [showOverdue, setShowOverdue] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
 
   // React state variables that control enemy
@@ -57,8 +57,12 @@ export function TaskMaster() {
   const [prioritySort, setPrioritySort] = useState(true);
 
   // React state for non-dupelicate tasks lists
-  const [activeTasks, setActiveTasks] = useState<Array<Task>>(getActiveTasksFromStorage);
-  const [completeTasks, setCompleteTasks] = useState<Array<Task>>(getCompleteTasksFromStorage);
+  const [activeTasks, setActiveTasks] = useState<Array<Task>>(
+    getActiveTasksFromStorage
+  );
+  const [completeTasks, setCompleteTasks] = useState<Array<Task>>(
+    getCompleteTasksFromStorage
+  );
 
   // React state that determines which day to filter for
   const [filterDate, setFilterDate] = useState(new Date());
