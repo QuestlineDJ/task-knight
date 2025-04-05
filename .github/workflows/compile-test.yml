@@ -1,0 +1,17 @@
+name: Node.js CI
+
+on:
+   push:
+      branches: [ "main", "working" ]
+   pull_request:
+      branches: [ "main", "working" ]
+
+jobs:
+   build:
+      runs-on: ubuntu-latest
+      steps:
+       - uses: actions/checkout@v4
+       - name: Install project dependncies
+         run: npm install
+       - name: Build project
+         run: npm run build
