@@ -25,6 +25,17 @@ export class Task {
       this.due_time = due_time;
       this.done_time = 0;
    }
+
+   /**
+    * create copy of task
+    */
+   copy() {
+      var copyTask = new Task(this.name, this.priority, this.due_time, this.id);
+      copyTask.creation_time = this.creation_time;
+      copyTask.done_time = this.done_time;
+
+      return copyTask;
+   }
 }
 
 /**
