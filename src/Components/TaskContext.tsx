@@ -1,15 +1,15 @@
 import { createContext, useReducer } from 'react';
 import { Task, TaskSorting } from '../TaskUtilities'
 
-export const ActiveTasksContext = createContext<Array<Task> | null>(null);
+export const ActiveTasksContext = createContext<TaskCollection | null>(null);
 export const ActiveTasksDispatchContext = createContext<any|null>(null);
 
-export const CompletedTasksContext = createContext<Array<Task> | null>(null);
+export const CompletedTasksContext = createContext<TaskCollection | null>(null);
 export const CompletedTasksDispatchContext = createContext<any|null>(null);
 
 export function TaskProvider({ children }:any) {
-   const [ activeTasks, activeTaskDispatch ] = useReducer(taskReducer, new Array());
-   const [ completedTasks, completedTaskDispatch ] = useReducer(taskReducer, new Array());
+   const [ activeTasks, activeTaskDispatch ] = useReducer(taskReducer, initialTaskCollection());
+   const [ completedTasks, completedTaskDispatch ] = useReducer(taskReducer, initialTaskCollection());
 
    return (
       <ActiveTasksContext.Provider value={activeTasks}>
@@ -24,45 +24,59 @@ export function TaskProvider({ children }:any) {
    );
 }
 
-interface Tasks {
+interface TaskCollection {
    tasks: Array<Task>
    sortBy: TaskSorting
-   
 }
 
-function taskReducer(tasks: Array<Task>, action:any) : Array<Task> {
+function initialTaskCollection() : TaskCollection {
+   return {
+      sortBy: TaskSorting.ByDueDate,
+      tasks: new Array<Task>()
+   };
+}
+
+function taskReducer(taskCollection: TaskCollection, action:any) : TaskCollection {
    switch ( action.type ) {
       case 'add': {
-         return [...tasks, action.task]; //TODO sort
+         return {
+            sortBy: taskCollection.sortBy,
+            tasks: [...taskCollection.tasks, action.task] //TODO: sort
+         };
       }
 
       case 'edit': {
-         var newTasks = tasks.filter((element)=> element.id != action.task.id);
-         return [...tasks, action.task ];
-
+         var newTasks = taskCollection.tasks.filter((element)=> element.id != action.task.id);
+         return {
+            sortBy: taskCollection.sortBy,
+            tasks: [...taskCollection.tasks, action.task ]
+         };
       }
 
       case 'delete': {
-         var newTasks = tasks.filter((element)=> element.id != action.task.id);
-         return newTasks;
+         var newTasks = taskCollection.tasks.filter((element)=> element.id != action.task.id);
+         return { 
+            sortBy: taskCollection.sortBy,
+            tasks: newTasks
+         };
       }
 
       case 'changeSort': {
          //TODO: implement
-         return tasks;
+         return taskCollection;
       }
 
       case 'load': {
          //TODO: implement
-         return tasks;
+         return taskCollection;
       }
 
       default: {
          console.warn("Unknown active task dispatch");
-         return tasks;
+         return taskCollection;
       }
    }
 
-   return tasks;
+   return taskCollection;
 }
 
