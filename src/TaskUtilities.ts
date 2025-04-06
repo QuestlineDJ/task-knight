@@ -1,4 +1,4 @@
-import { setLocalStorage, getLocalStorage, getAllMappedLocalStorage, deleteItemLocalStorage } from "./LocalStorageManager";
+import { setLocalStorage, getAllMappedLocalStorage, deleteItemLocalStorage } from "./LocalStorageManager";
 
 export class Task {
    id: number;
@@ -7,6 +7,7 @@ export class Task {
    creation_time: number;
    due_time: number;
    done_time: number;
+   task_type: TaskType;
 
    /**
     * Constructs a Task with a random id.
@@ -17,24 +18,27 @@ export class Task {
     *
     * @returns A constructed task object
     */
-   constructor(name: string, priority: number, due_time: number, taskid = 0) {
+   constructor(name: string, priority: number, due_time: number, taskid = 0, creation_time: number = -1, done_time: number = -1, taskType: TaskType = TaskType.Active) {
       this.id = (taskid === 0 ? Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) : taskid);
       this.name = name;
       this.priority = priority;
-      this.creation_time = getCurrentTime();
+      this.creation_time = (creation_time === -1 ? getCurrentTime() : creation_time);
       this.due_time = due_time;
-      this.done_time = 0;
+      this.done_time = (done_time === -1 ? 0 : done_time);
+      this.task_type = taskType;
    }
 }
 
 /**
  * Interface for use when storing tasks in local storage
  */
-interface TaskStorage {
+export interface TaskStorage {
    name: string;
    priority: number;
    creation_time: number;
    due_time: number;
+   done_time: number;
+   task_type: TaskType;
 }
 
 /**
@@ -65,12 +69,16 @@ function generateStorageKey(taskid: number, type: TaskType) : string {
  */
 export function saveTaskToStorage(task: Task, type: TaskType) {
    var storage = {
+      id: task.id,
       name: task.name,
       priority: task.priority,
       creation_time: task.creation_time,
-      due_time: task.due_time
+      due_time: task.due_time,
+      done_time: task.done_time,
+      taskType: task.task_type
    };
 
+   console.log(generateStorageKey(task.id, type), JSON.stringify(storage));
    setLocalStorage(generateStorageKey(task.id, type), JSON.stringify(storage));
 }
 
@@ -99,7 +107,7 @@ export function getActiveTasksFromStorage() : Array<Task> {
          var taskid = Number(key.slice("active.".length));
          var data: TaskStorage  = JSON.parse(value);
 
-         activeTasks.push(new Task(data.name, data.priority, data.due_time, taskid));
+         activeTasks.push(new Task(data.name, data.priority, data.due_time, taskid, data.creation_time, data.done_time, data.task_type));
       }
    });
 

@@ -14,7 +14,7 @@
  *
  * Author: Ryan Herwig
  */
-
+import { saveTaskToStorage, Task, TaskType, TaskStorage } from "./TaskUtilities";
 
 const IS_DEBUGGING = false;
 
@@ -40,8 +40,8 @@ export function getLocalStorage(key: string) {
 }
 
 // TODO: talk with Ryan about possibility of this implementation
-export function getAllMappedLocalStorage() : Map<string, string> {
-   var data = new Map();
+export function getAllMappedLocalStorage(): Map<string, string> {
+    var data = new Map();
 
     for (var i = 0; i < localStorage.length; i++) {
         //If key is not null
@@ -49,8 +49,7 @@ export function getAllMappedLocalStorage() : Map<string, string> {
             data.set(localStorage.key(i), getLocalStorage(localStorage.key(i) as string));
         }
     }
-
-   return data;
+    return data;
 }
 
 export function getAllLocalStorage() {
@@ -59,8 +58,7 @@ export function getAllLocalStorage() {
     return data;
 }
 
-export function deleteItemLocalStorage(key: string)
-{
+export function deleteItemLocalStorage(key: string) {
     if (getLocalStorage(key) != "" && getLocalStorage(key) != null)
         localStorage.removeItem(key);
 }
@@ -72,14 +70,29 @@ export function deleteAllLocalStorage() {
     localStorage.clear();
 }
 
+
+var privateNonlocalData = "";
 /**
  * Saves the local storage data into a txt file and downloads it onto the computer
  */
 export function saveFile() {
-    //Data
-    var data = getAllLocalStorage();
-    console.log(data);
-    data = encrypt();
+    //Gets data
+    var dataMap = getAllMappedLocalStorage();
+    privateNonlocalData = "";
+
+    //Sends data into a string
+    dataMap.forEach((value, key) => {
+        if (key.startsWith("active.")) {
+            // Discard prefix
+            var taskid = Number(key.slice("active.".length));
+            var dataValue: TaskStorage = JSON.parse(value);
+
+            privateNonlocalData += JSON.stringify(new Task(dataValue.name, dataValue.priority, dataValue.due_time, taskid));
+        }
+    });
+    console.log(privateNonlocalData);
+
+    var data = encrypt();
     //Converts the data to a plain text Blob
     //A blob is a raw data type that is immutable. It can be read as binary or as text and can be converted into a ReadableStream.
     var dataToBlob = new Blob([data], { type: "text/plain" });
@@ -120,24 +133,35 @@ export function loadFile(event: React.ChangeEvent<HTMLInputElement>) {
     reader.onload = function () {
         //Grabs the read data
         var data = reader.result as string;
+
+        //Decrypts Data
         data = decyrpt(data);
-        if (data != "") {
-            //Loops forever until a semicolon is not found
-            while (data.indexOf(";") != -1) {
-                //Creates local storage data from text file
-                data = editLocalStorageFromFile(data);
-            }
+        console.log(data); //DEBUG - DELETE LATER
 
-            console.log(getAllLocalStorage());
+        //Creates an array of all tasks
+        var dataArray = new Array();
+        //Splits tasks by the } bracket
+        var iterations = data.split('}').length - 1;
+        for (var i = 0; i < iterations; i++) {
+            var index = data.indexOf('}');
 
-            //Tells Task System to reload its tasks
-            // TODO: implement loading of a file
+            //Creates a JSON string and pushes it to the array
+            dataArray.push(JSON.parse(data.substring(0, index + 1)));
+
+            data = data.substring(index + 1);
+        }
+
+        //Creates tasks from the JSON strings
+        for (var i = 0; i < dataArray.length; i++) {
+            saveTaskToStorage(new Task(dataArray[i].name, dataArray[i].priority, dataArray[i].due_time,
+                dataArray[i].id, dataArray[i].creation_time, dataArray[i].done_time, 
+                dataArray[i].task_type), dataArray[i].task_type);
         }
     };
-    
-    if ( !fileInput.files ) {
-      console.error("NUll file detected");
-      return;
+
+    if (!fileInput.files) {
+        console.error("NUll file detected");
+        return;
     }
 
     //Have the reader start reading the first file inputted. Ignore all other files.
@@ -188,7 +212,7 @@ const saltAmountArray = [1, 2, 3, 4, 5];
 
 function encrypt() {
     //Gets the data from the storage
-    var plainText = getAllLocalStorage();
+    var plainText = privateNonlocalData;
     console.log("Plain Text: " + plainText);
 
     //Creates Vigenere Cipher using keyWord
@@ -262,7 +286,7 @@ function encrypt() {
     setLocalStorage("HashData", hashValue as any as string);
 
     if (IS_DEBUGGING) {
-        console.log(getAllLocalStorage());
+        console.log(JSON.stringify(getAllMappedLocalStorage()));
         console.log("Hash Data = " + hashValue);
     }
 
@@ -281,7 +305,7 @@ function decyrpt(text: string) {
     console.log("Hash: " + hashValue);
     console.log(Math.round((hashValue % hashDifference) * 100) / 100);
     if (Math.round((hashValue % hashDifference) * 100) / 100 != hashDifference
-            && Math.round((hashValue % hashDifference) * 100) / 100 != 0) {
+        && Math.round((hashValue % hashDifference) * 100) / 100 != 0) {
         console.log("ERROR: Incorrect File or File has been tampered with!");
         return "";
     }
