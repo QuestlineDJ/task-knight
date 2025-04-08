@@ -66,6 +66,49 @@ export interface TaskCollection {
 }
 
 /**
+ * Task reducer for React component
+ */
+function taskReducer(taskCollection: TaskCollection, action: any): TaskCollection {
+   switch ( action.type ) {
+      case 'add':
+      case 'edit': {
+         var newTasks = taskCollection.tasks.filter((element)=> element.id != action.task.id);
+         var newTaskCollection: TaskCollection = {
+            sortBy: taskCollection.sortBy,
+            tasks: sortByParameter([...newTasks, action.task], taskCollection.sortBy)
+         };
+         return newTaskCollection;
+      }
+
+      case 'delete': {
+         var newTasks = taskCollection.tasks.filter((element)=> element.id != action.task.id);
+         var newTaskCollection: TaskCollection = {
+            sortBy: taskCollection.sortBy,
+            tasks: newTasks
+         };
+
+         return newTaskCollection;
+      }
+
+      case 'changeSort': {
+         var newTaskCollection: TaskCollection = {
+            sortBy: action.sortBy,
+            tasks: sortByParameter(taskCollection.tasks, action.sortBy)
+         };
+
+         return newTaskCollection;
+      }
+
+      case 'load': {
+         //TODO implement
+      }
+   }
+
+   console.warn("Unknown task dispatch");
+   return taskCollection;
+}
+
+/**
  * Generate key value for local storage
  *
  * @param task - The taskid to generate the key from
@@ -251,6 +294,27 @@ export function sortByDueDate(array: Array<Task>): Array<Task> {
    });
 
    return newArray;
+}
+
+/**
+ * Create a new array from given array with taks being sorted by the parameter given
+ * @param array - The array that contains tasks to be sorted
+ * @param soryBy - By which property to sort by
+ *
+ * @returns A sorted array of tasks by the function parameter
+ */
+export function sortByParameter(array: Array<Task>, sortBy: TaskSorting) {
+   switch ( sortBy ) {
+      case TaskSorting.ByPriority: {
+         return sortByPriority(array);
+      }
+
+      case TaskSorting.ByDueDate: {
+         return sortByDueDate(array);
+      }
+   }
+
+   return array;
 }
 
 /**
