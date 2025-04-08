@@ -58,6 +58,14 @@ export const enum TaskSorting {
 }
 
 /**
+ * Interface for use in React reducers/states
+ */
+export interface TaskCollection {
+   tasks: Array<Task>
+   sortBy: TaskSorting
+}
+
+/**
  * Generate key value for local storage
  *
  * @param task - The taskid to generate the key from
