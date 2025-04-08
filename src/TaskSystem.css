@@ -55,3 +55,9 @@
     height: auto;
   }
 
+.TaskBoard{
+  background-image: url(/panel_tasks.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
