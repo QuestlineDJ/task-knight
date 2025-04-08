@@ -77,6 +77,16 @@ function taskReducer(taskCollection: TaskCollection, action: any): TaskCollectio
             sortBy: taskCollection.sortBy,
             tasks: sortByParameter([...newTasks, action.task], taskCollection.sortBy)
          };
+
+         // TODO make 100 a constant
+         if ( "trim" in action && action.trim == true ) {
+            if ( newTaskCollection.tasks.length > 100 ) {
+               // Remove elements over budget
+               var overBudget = 100 - newTaskCollection.tasks.length;
+               newTaskCollection.tasks = newTaskCollection.tasks.slice(overBudget);
+            }
+         }
+
          return newTaskCollection;
       }
 
