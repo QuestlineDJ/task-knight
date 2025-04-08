@@ -1,3 +1,5 @@
+import { setLocalStorage, getAllLocalStorage } from "./LocalStorageManager";
+
 export function increasePlayerDamage(
   currentGoldAmount: number,
   setCurrentGoldAmount: React.Dispatch<React.SetStateAction<number>>,
@@ -47,7 +49,7 @@ export function damageEnemy(
         giveGold(setCurrentGoldAmount);
       }, 500);
     }
-    //setLocalStorage("bossHealth", newHealth as any as string);
+    setLocalStorage("bossHealth", newHealth as any as string);
     return newHealth;
   });
 }
