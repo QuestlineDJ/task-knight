@@ -68,7 +68,7 @@ export interface TaskCollection {
 /**
  * Task reducer for React component
  */
-function taskReducer(taskCollection: TaskCollection, action: any): TaskCollection {
+export function taskReducer(taskCollection: TaskCollection, action: any): TaskCollection {
    switch ( action.type ) {
       case 'add':
       case 'edit': {
