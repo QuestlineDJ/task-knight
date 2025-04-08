@@ -50,6 +50,14 @@ export const enum TaskType {
 }
 
 /**
+ * Enum used to sort what type of sorting is desired
+ */
+export const enum TaskSorting {
+   ByDueDate,
+   ByPriority
+}
+
+/**
  * Generate key value for local storage
  *
  * @param task - The taskid to generate the key from
