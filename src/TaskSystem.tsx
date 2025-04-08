@@ -3,6 +3,7 @@ import redDragon from "./images/boss_dragon.png";
 import blueDragon from "./images/boss_dragon_blue.png";
 import purpleDragon from "./images/boss_dragon_purple.png";
 import { setLocalStorage } from "./LocalStorageManager";
+import addTaskButton from "./assets/Task Knight Assets/Main Panel/Task Panel/addButton.png";
 import {
   Task,
   getTimeSeconds,
@@ -260,8 +261,24 @@ export function TaskMaster() {
       <button type="button" onClick={() => setShowComplete(!showComplete)}>
         Toggle Complete Tasks
       </button>
-      <button type="button" onClick={() => new_task()}>
-        Create New Task
+      <button
+        className="createTask"
+        type="button"
+        style={{
+          backgroundSize: "cover",
+          backgroundColor: "transparent",
+          width: "112px",
+          height: "105px",
+          placeItems: "center",
+          border: "none",
+          outline: "none",
+        }}
+        onClick={() => new_task()}
+      >
+        <img
+          src={addTaskButton}
+          style={{ width: "100%", height: "100%", placeItems: "center" }}
+        ></img>
       </button>
       <hr />
       <span>
