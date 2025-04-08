@@ -18,7 +18,7 @@ import {
   getActiveTasksFromStorage,
   getCompleteTasksFromStorage,
 } from "./TaskUtilities";
-
+import { increasePlayerDamage, giveGold, damageEnemy } from "./GameHelper";
 
 import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";
@@ -77,46 +77,6 @@ export function TaskMaster() {
 
   // The name for the filtered tasks
   let filterName = filterDate.toLocaleDateString() + " Tasks";
-
-  function increasePlayerDamage() {
-    if (currentGoldAmount >= 10) {
-      setDamageAmount((prev) => prev + 10);
-      setCurrentGoldAmount((prevGold) => prevGold - 10);
-      console.log(
-        "Increased damage by 10. New damage amount: ",
-        damageAmount + 10
-      );
-      setLocalStorage("currentDamage", damageAmount as any as string);
-    } else {
-      console.log("Not enough gold");
-    }
-  }
-
-  function giveGold() {
-    setCurrentGoldAmount((prev) => {
-      const newGold = Math.max(0, prev + 10);
-      console.log("Updated Gold:", newGold);
-      setLocalStorage("gold", newGold as any as string);
-      return newGold;
-    });
-  }
-
-  function damageEnemy() {
-    setEnemyHealth((prev) => {
-      const newHealth = Math.max(0, prev - damageAmount);
-      console.log("Updated Health: ", newHealth);
-
-      if (newHealth === 0 && currentImage < images.length) {
-        setTimeout(() => {
-          setCurrentImage((prevIndex) => prevIndex + 1);
-          setEnemyHealth(100);
-          giveGold();
-        }, 500);
-      }
-      setLocalStorage("bossHealth", newHealth as any as string);
-      return newHealth;
-    });
-  }
 
   // Set a refresh peroid to detech tasks to become overdue
   setTimeout(() => {
@@ -225,7 +185,14 @@ export function TaskMaster() {
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setOverdueTasks(createOverdueList(newActiveTasks));
 
-    damageEnemy();
+    damageEnemy(
+      damageAmount,
+      currentImage,
+      images,
+      setEnemyHealth,
+      setCurrentImage,
+      setCurrentGoldAmount
+    );
 
     setActiveTasks(newActiveTasks);
     setCompleteTasks(newCompleteTasks);
@@ -259,7 +226,17 @@ export function TaskMaster() {
         <p>Health: {enemyHealth}</p>
         <p>Gold: {currentGoldAmount}</p>
         <p>
-          <button type="button" onClick={increasePlayerDamage}>
+          <button
+            type="button"
+            onClick={() =>
+              increasePlayerDamage(
+                currentGoldAmount,
+                setCurrentGoldAmount,
+                setDamageAmount,
+                damageAmount
+              )
+            }
+          >
             Increase Damage +10: Requires 10 Gold
           </button>
         </p>
