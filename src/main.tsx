@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { TaskMaster } from "./TaskSystem";
 import "./main.css";
 import SaveWindow from "./Components/SaveWindow";
+import ShopTab from "./Components/ShopTab";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
