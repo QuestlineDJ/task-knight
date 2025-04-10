@@ -1,4 +1,4 @@
-import { useState, useId } from "react";
+import { useState, useId, SetStateAction } from "react";
 import redDragon from "./images/boss_dragon.png";
 import blueDragon from "./images/boss_dragon_blue.png";
 import purpleDragon from "./images/boss_dragon_purple.png";
@@ -22,6 +22,7 @@ import {
   getCompleteTasksFromStorage,
 } from "./TaskUtilities";
 import { increasePlayerDamage, giveGold, damageEnemy } from "./GameHelper";
+import ShopTab from "./Components/ShopTab";
 
 import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";
@@ -227,6 +228,13 @@ export function TaskMaster() {
     <div>
       <div>
         <p>Health: {enemyHealth}</p>
+        <ShopTab
+          enemyHealth={enemyHealth}
+          currentGoldAmount={currentGoldAmount}
+          damageAmount={damageAmount}
+          setCurrentGoldAmount={setCurrentGoldAmount}
+          setDamageAmount={setDamageAmount}
+        ></ShopTab>
         <p>Gold: {currentGoldAmount}</p>
         <p>
           <button
