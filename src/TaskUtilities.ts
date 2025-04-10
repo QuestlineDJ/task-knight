@@ -18,14 +18,22 @@ export class Task {
     *
     * @returns A constructed task object
     */
-   constructor(name: string, priority: number, due_time: number, taskid = 0, creation_time: number = -1, done_time: number = -1, taskType: TaskType = TaskType.Active) {
+   constructor(name: string, priority: number, due_time: number = -1, taskid = 0, creation_time: number = -1, done_time: number = -1, taskType: TaskType = TaskType.Active) {
       this.id = (taskid === 0 ? Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) : taskid);
       this.name = name;
       this.priority = priority;
       this.creation_time = (creation_time === -1 ? getCurrentTime() : creation_time);
-      this.due_time = due_time;
+      this.due_time = ( due_time === -1 ? getCurrentTime() : due_time);
       this.done_time = (done_time === -1 ? 0 : done_time);
       this.task_type = taskType;
+   }
+
+   /**
+    * Creates a copy of the task.
+    */
+   copy() : Task {
+      var copyTask = new Task(this.name, this.priority, this.due_time, this.creation_time, this.done_time, this.task_type);
+      return copyTask;
    }
 }
 
@@ -359,4 +367,25 @@ export function createOverdueList(array: Array<Task>): Array<Task> {
    return array.filter((element) => {
       return now > element.due_time;
    });
+}
+
+/**
+ * Reducer function for displays
+ */
+export function displayReducer(current_state: boolean, action:any) : boolean {
+   switch ( action.type ) {
+      case 'show': {
+         return true;
+      }
+
+      case 'hide': {
+         return false;
+      }
+
+      case 'toggle': {
+         return !current_state;
+      }
+
+   }
+   return current_state;
 }
