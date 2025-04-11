@@ -14,6 +14,7 @@
  *
  * Author: Ryan Herwig
  */
+import { GameData, saveGameDataToStorage } from "./GameHelper";
 import { saveTaskToStorage, Task, TaskType, TaskStorage } from "./TaskUtilities";
 
 const IS_DEBUGGING = false;
@@ -71,26 +72,35 @@ export function deleteAllLocalStorage() {
 }
 
 
-var privateNonlocalData = "";
+var privateNonlocalTaskData = "";
+var privateNonlocalGameData = "";
 /**
  * Saves the local storage data into a txt file and downloads it onto the computer
  */
 export function saveFile() {
     //Gets data
     var dataMap = getAllMappedLocalStorage();
-    privateNonlocalData = "";
+    privateNonlocalTaskData = "";
+    privateNonlocalGameData = "";
 
     //Sends data into a string
     dataMap.forEach((value, key) => {
-        if (key.startsWith("active.")) {
+        if (key.startsWith("active.") || key.startsWith("complete.")) {
             // Discard prefix
             var taskid = Number(key.slice("active.".length));
             var dataValue: TaskStorage = JSON.parse(value);
 
-            privateNonlocalData += JSON.stringify(new Task(dataValue.name, dataValue.priority, dataValue.due_time, taskid));
+            privateNonlocalTaskData += JSON.stringify(new Task(dataValue.name, dataValue.priority, dataValue.due_time, taskid));
+        }
+        if (key === "game.data")
+        {
+            var dataVal: GameData = JSON.parse(value);
+
+            privateNonlocalGameData += JSON.stringify(new GameData(dataVal.gold, dataVal.attack, dataVal.bossHealth));
         }
     });
-    console.log(privateNonlocalData);
+    console.log(privateNonlocalTaskData);
+    console.log(privateNonlocalGameData);
 
     var data = encrypt();
     //Converts the data to a plain text Blob
@@ -139,24 +149,30 @@ export function loadFile(event: React.ChangeEvent<HTMLInputElement>) {
         console.log(data); //DEBUG - DELETE LATER
 
         //Creates an array of all tasks
-        var dataArray = new Array();
+        var taskDataArray = new Array();
+        
         //Splits tasks by the } bracket
-        var iterations = data.split('}').length - 1;
+        var taskData = data.substring(0, data.indexOf("|"));
+        var gameData = data.substring(data.indexOf("|") + 1, data.lastIndexOf("}") + 1);
+        var iterations = taskData.split('}').length - 1;
         for (var i = 0; i < iterations; i++) {
-            var index = data.indexOf('}');
+            var index = taskData.indexOf('}');
 
             //Creates a JSON string and pushes it to the array
-            dataArray.push(JSON.parse(data.substring(0, index + 1)));
+            taskDataArray.push(JSON.parse(taskData.substring(0, index + 1)));
 
-            data = data.substring(index + 1);
+            taskData = taskData.substring(index + 1);
         }
+
+        var gameDataArray = JSON.parse(gameData);
 
         //Creates tasks from the JSON strings
-        for (var i = 0; i < dataArray.length; i++) {
-            saveTaskToStorage(new Task(dataArray[i].name, dataArray[i].priority, dataArray[i].due_time,
-                dataArray[i].id, dataArray[i].creation_time, dataArray[i].done_time, 
-                dataArray[i].task_type), dataArray[i].task_type);
+        for (var i = 0; i < taskDataArray.length; i++) {
+            saveTaskToStorage(new Task(taskDataArray[i].name, taskDataArray[i].priority, taskDataArray[i].due_time,
+                taskDataArray[i].id, taskDataArray[i].creation_time, taskDataArray[i].done_time,
+                taskDataArray[i].task_type), taskDataArray[i].task_type);
         }
+        saveGameDataToStorage(new GameData(gameDataArray.gold, gameDataArray.attack, gameDataArray.bossHealth));
     };
 
     if (!fileInput.files) {
@@ -212,7 +228,9 @@ const saltAmountArray = [1, 2, 3, 4, 5];
 
 function encrypt() {
     //Gets the data from the storage
-    var plainText = privateNonlocalData;
+    var plainText = privateNonlocalTaskData;
+    plainText += "|";
+    plainText += privateNonlocalGameData;
     console.log("Plain Text: " + plainText);
 
     //Creates Vigenere Cipher using keyWord
