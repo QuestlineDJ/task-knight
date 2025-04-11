@@ -1,8 +1,11 @@
-import { useState, useId } from "react";
+import { useState, useId, SetStateAction } from "react";
 import redDragon from "./images/boss_dragon.png";
 import blueDragon from "./images/boss_dragon_blue.png";
 import purpleDragon from "./images/boss_dragon_purple.png";
 import { setLocalStorage } from "./LocalStorageManager";
+import addTaskButton from "./assets/Task Knight Assets/Main Panel/Task Panel/addButton.png";
+import taskBoard from "./assets/Task Knight Assets/Main Panel/Task Panel/panel_tasks.png";
+
 import {
   Task,
   getTimeSeconds,
@@ -19,6 +22,7 @@ import {
   getCompleteTasksFromStorage,
 } from "./TaskUtilities";
 import { increasePlayerDamage, giveGold, damageEnemy } from "./GameHelper";
+import ShopTab from "./Components/ShopTab";
 
 import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";
@@ -224,6 +228,13 @@ export function TaskMaster() {
     <div>
       <div>
         <p>Health: {enemyHealth}</p>
+        <ShopTab
+          enemyHealth={enemyHealth}
+          currentGoldAmount={currentGoldAmount}
+          damageAmount={damageAmount}
+          setCurrentGoldAmount={setCurrentGoldAmount}
+          setDamageAmount={setDamageAmount}
+        ></ShopTab>
         <p>Gold: {currentGoldAmount}</p>
         <p>
           <button
@@ -248,21 +259,45 @@ export function TaskMaster() {
           <p>All enemies defeated!</p>
         )}
       </div>
-      <button type="button" onClick={() => setShowOverdue(!showOverdue)}>
-        Toggle Overdue Tasks
-      </button>
-      <button type="button" onClick={() => setShowTodayTasks(!showTodayTasks)}>
-        Toggle Day Tasks
-      </button>
-      <button type="button" onClick={() => setShowActive(!showActive)}>
-        Toggle Active Tasks
-      </button>
-      <button type="button" onClick={() => setShowComplete(!showComplete)}>
-        Toggle Complete Tasks
-      </button>
-      <button type="button" onClick={() => new_task()}>
-        Create New Task
-      </button>
+
+      <div className="TaskBoard">
+        <button type="button" onClick={() => setShowOverdue(!showOverdue)}>
+          Toggle Overdue Tasks
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowTodayTasks(!showTodayTasks)}
+        >
+          Toggle Day Tasks
+        </button>
+        <button type="button" onClick={() => setShowActive(!showActive)}>
+          Toggle Active Tasks
+        </button>
+        <button type="button" onClick={() => setShowComplete(!showComplete)}>
+          Toggle Complete Tasks
+        </button>
+
+        <button
+          className="createTask"
+          type="button"
+          style={{
+            backgroundSize: "cover",
+            backgroundColor: "transparent",
+            width: "112px",
+            height: "105px",
+            placeItems: "center",
+            border: "none",
+            outline: "none",
+          }}
+          onClick={() => new_task()}
+        >
+          <img
+            src={addTaskButton}
+            style={{ width: "100%", height: "100%", placeItems: "center" }}
+          ></img>
+        </button>
+      </div>
+
       <hr />
       <span>
         Sort by:
