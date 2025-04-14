@@ -29,63 +29,37 @@ export function saveGameDataToStorage(gameData: GameData) {
    setLocalStorage(getKey(), JSON.stringify(storage));
 }
 
-export function LoadGameDataFromStorage()
+export function LoadGameDataFromStorage() : GameData
 {
   var data = getAllMappedLocalStorage();
 
    data.forEach((value, key) =>{
       if ( key === getKey()) {
+        console.log("FOUND");
          // Discard prefix
          var data: GameData  = JSON.parse(value);
-
+         console.log(data);
+         gameData = data;
          return new GameData(data.gold, data.attack, data.bossHealth);
       }
    });
+   return new GameData(0, 10, 100);
 }
 
 function getKey() { return "game.data" };
 
-var gameData = new GameData(0, 10, 100);
+var gameData: GameData;
 
-function setPlayerDamage(  damage: number,
-  setDamageAmount: React.Dispatch<React.SetStateAction<number>>,
-) {
-  setDamageAmount(damage);
-}
-
-function setGold(gold: number, setCurrentGoldAmount: React.Dispatch<React.SetStateAction<number>>)
+export function LoadGameData()
 {
-  setCurrentGoldAmount(() => {
-    const newGold = gold;
-    console.log("Updated Gold:", newGold);
-    gameData.gold = newGold;
-    return newGold;
-  });
+  LoadGameDataFromStorage();
 }
 
-export function setBossHealth(
-  health: number,
-  currentImage: number,
-  images: string[],
-  setEnemyHealth: React.Dispatch<React.SetStateAction<number>>,
-  setCurrentImage: React.Dispatch<React.SetStateAction<number>>,
-  setCurrentGoldAmount: React.Dispatch<React.SetStateAction<number>>
-) {
-  setEnemyHealth((prev) => {
-    const newHealth = health;
-    console.log("Updated Health: ", newHealth);
-
-    if (newHealth === 0 && currentImage < images.length) {
-      setTimeout(() => {
-        setCurrentImage((prevIndex) => prevIndex + 1);
-        setEnemyHealth(100);
-        giveGold(setCurrentGoldAmount);
-      }, 500);
-    }
-    gameData.bossHealth = newHealth;
-    setLocalStorage(getKey(), JSON.stringify(gameData));
-    return newHealth;
-  });
+export function setPlayerDamageFromLocalStorage(setDamageAmount: React.Dispatch<React.SetStateAction<number>>, damage: number)
+{
+  setDamageAmount(gameData.attack);
+  damage = gameData.attack;
+  console.log(gameData.attack);
 }
 
 export function increasePlayerDamage(

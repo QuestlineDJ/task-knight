@@ -21,7 +21,7 @@ import {
   getActiveTasksFromStorage,
   getCompleteTasksFromStorage,
 } from "./TaskUtilities";
-import { increasePlayerDamage, giveGold, damageEnemy } from "./GameHelper";
+import { increasePlayerDamage, giveGold, damageEnemy, setPlayerDamageFromLocalStorage, LoadGameData } from "./GameHelper";
 import ShopTab from "./Components/ShopTab";
 
 import { TaskForm } from "./TaskForm";
@@ -223,6 +223,14 @@ export function TaskMaster() {
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setOverdueTasks(createOverdueList(newActiveTasks));
   }
+  
+  function onLoadHandler()
+  {
+    LoadGameData();
+    setPlayerDamageFromLocalStorage(setDamageAmount, damageAmount);
+    console.log(damageAmount);
+  }
+  window.onload = onLoadHandler;
 
   return (
     <div>
