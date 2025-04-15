@@ -57,7 +57,20 @@ const App: React.FC = () => {
 
         <aside className="sidebar right-sidebar">
           <img src={btnUpDown} alt="Reorder Button" className="button-updown" />
-          <img src={btnAdd} alt="Add Task Button" className="button-add" />
+          <button
+            className="createTask"
+            type="button"
+            style={{
+              backgroundSize: "cover",
+              backgroundColor: "transparent",
+              width: "100%",
+              placeItems: "center",
+              border: "none",
+              outline: "none",
+            }}
+          >
+            <img src={btnAdd} alt="Add Task Button" className="button-add" />
+          </button>
         </aside>
       </div>
     </div>
