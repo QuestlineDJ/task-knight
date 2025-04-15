@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SaveButton from "./SaveButton";
-import { increasePlayerDamage } from "../GameHelper";
+import { defeatEnemy, increasePlayerDamage } from "../GameHelper";
 import { damageEnemyShop } from "../GameHelper";
 
 type ShopTabProps = {
@@ -58,7 +58,7 @@ function ShopTab({
                 )
               }
             >
-              Increase Damage +10
+              Increase Damage +10 (10 Gold)
             </button>
             <p>
               <button
@@ -75,21 +75,24 @@ function ShopTab({
                   )
                 }
               >
-                Damage Enemy
+                Damage Enemy -10 (40 Gold)
               </button>
             </p>
             <button
               className="option-button"
               onClick={() =>
-                increasePlayerDamage(
-                  currentGoldAmount,
+                defeatEnemy(
+                  damageAmount,
+                  currentImage,
+                  images,
+                  setEnemyHealth,
+                  setCurrentImage,
                   setCurrentGoldAmount,
-                  setDamageAmount,
-                  damageAmount
+                  currentGoldAmount
                 )
               }
             >
-              Damage + 10
+              Defeat Current Enemy (60 Gold)
             </button>
           </div>
         </div>
