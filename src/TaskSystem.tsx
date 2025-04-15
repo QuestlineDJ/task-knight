@@ -28,6 +28,7 @@ import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";
 
 import "./index.css";
+import UI from "./UI";
 
 const images = [redDragon, blueDragon, purpleDragon];
 
@@ -228,6 +229,7 @@ export function TaskMaster() {
     <div>
       <div>
         <p>Health: {enemyHealth}</p>
+        <UI newTask={new_task}></UI>
         <ShopTab
           enemyHealth={enemyHealth}
           currentGoldAmount={currentGoldAmount}

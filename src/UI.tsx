@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 
 // Image imports (placeholders - replace with your own)
 import headerLeft from "./assets/Task Knight Assets/Corner UI/emptyLevelBadge.png";
@@ -20,7 +21,11 @@ const tasks: string[] = [
   "Finish Doing Laundry",
   "Finish Math Homework",
 ];
-function UI() {
+
+type UIProps = {
+  newTask: React.Dispatch<React.SetStateAction<number>>;
+};
+function UI({ newTask }: UIProps) {
   return (
     <div className="app-container">
       <header className="header">
