@@ -51,3 +51,31 @@ export function damageEnemy(
     return newHealth;
   });
 }
+
+export function damageEnemyShop(
+  damageAmount: number,
+  currentImage: number,
+  images: string[],
+  setEnemyHealth: React.Dispatch<React.SetStateAction<number>>,
+  setCurrentImage: React.Dispatch<React.SetStateAction<number>>,
+  setCurrentGoldAmount: React.Dispatch<React.SetStateAction<number>>,
+  currentGoldAmount: number
+) {
+  setEnemyHealth((prev) => {
+    let newHealth = prev;
+    if (currentGoldAmount >= 40) {
+      const newHealth = Math.max(0, prev - damageAmount);
+      console.log("Updated Health: ", newHealth);
+    }
+
+    if (newHealth === 0 && currentImage < images.length) {
+      setTimeout(() => {
+        setCurrentImage((prevIndex) => prevIndex + 1);
+        setEnemyHealth(100);
+        giveGold(setCurrentGoldAmount);
+      }, 500);
+    }
+    //setLocalStorage("bossHealth", newHealth as any as string);
+    return newHealth;
+  });
+}

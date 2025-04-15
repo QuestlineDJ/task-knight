@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SaveButton from "./SaveButton";
 import { increasePlayerDamage } from "../GameHelper";
+import { damageEnemyShop } from "../GameHelper";
 
 type ShopTabProps = {
   enemyHealth: number;
@@ -8,6 +9,10 @@ type ShopTabProps = {
   damageAmount: number;
   setCurrentGoldAmount: React.Dispatch<React.SetStateAction<number>>;
   setDamageAmount: React.Dispatch<React.SetStateAction<number>>;
+  currentImage: number;
+  images: string[];
+  setEnemyHealth: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentImage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 function ShopTab({
@@ -16,6 +21,10 @@ function ShopTab({
   damageAmount,
   setCurrentGoldAmount,
   setDamageAmount,
+  currentImage,
+  images,
+  setEnemyHealth,
+  setCurrentImage,
 }: ShopTabProps) {
   const [isOpen, setOpen] = useState(false);
 
@@ -36,7 +45,39 @@ function ShopTab({
             </p>
             <div className="content">
               <h2>Welcome To The Shop!</h2>
+              <p>Gold: {currentGoldAmount}</p>
             </div>
+            <button
+              className="option-button"
+              onClick={() =>
+                increasePlayerDamage(
+                  currentGoldAmount,
+                  setCurrentGoldAmount,
+                  setDamageAmount,
+                  damageAmount
+                )
+              }
+            >
+              Increase Damage +10
+            </button>
+            <p>
+              <button
+                className="option-button"
+                onClick={() =>
+                  damageEnemyShop(
+                    damageAmount,
+                    currentImage,
+                    images,
+                    setEnemyHealth,
+                    setCurrentImage,
+                    setCurrentGoldAmount,
+                    currentGoldAmount
+                  )
+                }
+              >
+                Damage Enemy
+              </button>
+            </p>
             <button
               className="option-button"
               onClick={() =>
