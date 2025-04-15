@@ -42,7 +42,7 @@ export function damageEnemy(
 
     if (newHealth === 0 && currentImage < images.length) {
       setTimeout(() => {
-        setCurrentImage((prevIndex) => prevIndex + 1);
+        setCurrentImage((prevIndex) => (prevIndex + 1) % images.length);
         setEnemyHealth(100);
         giveGold(setCurrentGoldAmount);
       }, 500);
@@ -71,7 +71,7 @@ export function damageEnemyShop(
 
     if (newHealth === 0 && currentImage < images.length) {
       setTimeout(() => {
-        setCurrentImage((prevIndex) => prevIndex + 1);
+        setCurrentImage((prevIndex) => (prevIndex + 1) % images.length);
         setEnemyHealth(100);
         giveGold(setCurrentGoldAmount);
       }, 500);
@@ -100,7 +100,7 @@ export function defeatEnemy(
 
     if (newHealth === 0 && currentImage < images.length) {
       setTimeout(() => {
-        setCurrentImage((prevIndex) => prevIndex + 1);
+        setCurrentImage((prevIndex) => (prevIndex + 1) % images.length);
         setEnemyHealth(100);
         giveGold(setCurrentGoldAmount);
       }, 500);
