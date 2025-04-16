@@ -1,14 +1,21 @@
-import { useState, useId, SetStateAction } from "react";
-import redDragon from "./images/boss_dragon.png";
-import blueDragon from "./images/boss_dragon_blue.png";
-import purpleDragon from "./images/boss_dragon_purple.png";
-import { getLocalStorage } from "./LocalStorageManager";
-import addTaskButton from "./assets/Task Knight Assets/Main Panel/Task Panel/addButton.png";
-import taskBoard from "./assets/Task Knight Assets/Main Panel/Task Panel/panel_tasks.png";
+// TaskSystem.tsx
+import React, { useState } from "react";
+
+import headerLeft from "./assets/Task Knight Assets/Corner UI/emptyLevelBadge.png";
+import headerRight from "./assets/Task Knight Assets/Corner UI/goldBag.png";
+
+import character from "./assets/Task Knight Assets/Character UI & Sprites/playerCharacter_default.png";
+import dragon from "./assets/Task Knight Assets/Character UI & Sprites/boss_dragon.png";
+import dragon2 from "./assets/Task Knight Assets/Character UI & Sprites/boss_dragon_blue.png";
+import dragon3 from "./assets/Task Knight Assets/Character UI & Sprites/boss_dragon_purple.png";
+
+import panelBg from "./assets/Task Knight Assets/Main Panel/Task Panel/panel_tasks.png";
+
+import btnUpDown from "./assets/Task Knight Assets/Main Panel/Task Panel/sortButton.png";
+import btnAdd from "./assets/Task Knight Assets/Main Panel/Task Panel/addButton.png";
 
 import {
   Task,
-  getTimeSeconds,
   getCurrentTime,
   computeFieldDate,
   sortByPriority,
@@ -21,20 +28,20 @@ import {
   getActiveTasksFromStorage,
   getCompleteTasksFromStorage,
 } from "./TaskUtilities";
-import {damageEnemy, setPlayerDamageFromLocalStorage, LoadGameData, setEnemyHealthFromLocalStorage, setGoldFromStorage, setImageFromStorage } from "./GameHelper";
+
+import { increasePlayerDamage, giveGold, damageEnemy } from "./GameHelper";
 import ShopTab from "./Components/ShopTab";
 
 import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";
 
 import "./index.css";
+import SaveButton from "./Components/SaveButton";
+import SaveWindow from "./Components/SaveWindow";
 
-const images = [redDragon, blueDragon, purpleDragon];
+const images = [dragon, dragon2, dragon3];
 
-// Import date selection from higher up UI components
-export function TaskMaster() {
-  // Refresh overdue task list
-  // TODO: figure out optimium time
+export default function TaskSystem() {
   const overdue_check_timeout = 30 * 1000;
 
   // React state variables that control showing certain task lists
@@ -78,6 +85,8 @@ export function TaskMaster() {
   const [filterTasks, setFilterTasks] = useState(
     createFilterTasks(activeTasks, filterDate)
   );
+
+  const [showTogglePopup, setShowTogglePopup] = useState(false);
 
   // The name for the filtered tasks
   let filterName = filterDate.toLocaleDateString() + " Tasks";
@@ -223,142 +232,145 @@ export function TaskMaster() {
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setOverdueTasks(createOverdueList(newActiveTasks));
   }
-  
-  function onLoadHandler()
-  {
-    LoadGameData();
-    setPlayerDamageFromLocalStorage(setDamageAmount, damageAmount);
-    setEnemyHealthFromLocalStorage(setEnemyHealth);
-    setGoldFromStorage(setCurrentGoldAmount);
-    setImageFromStorage(setCurrentImage);
-  }
-  window.onload = onLoadHandler;
 
+  // --- RENDER UI + LOGIC ---
   return (
-    <div>
-      <div>
+    <div className="app-container">
+      <header className="header">
+        <img src={headerLeft} alt="Left Header" />
         <p>Health: {enemyHealth}</p>
-        <ShopTab
-          enemyHealth={enemyHealth}
-          currentGoldAmount={currentGoldAmount}
-          damageAmount={damageAmount}
-          setCurrentGoldAmount={setCurrentGoldAmount}
-          setDamageAmount={setDamageAmount}
-          currentImage={currentImage}
-          images={images}
-          setEnemyHealth={setEnemyHealth}
-          setCurrentImage={setCurrentImage}
-        ></ShopTab>
-        <p>Gold: {currentGoldAmount}</p>
-        {enemyHealth > 0 ? (
-          <img src={images[currentImage]} alt="Enemy Indicator" />
-        ) : currentImage < images.length - 1 ? (
-          <p>Next enemy coming up....</p>
-        ) : (
-          <p>All enemies defeated!</p>
-        )}
-      </div>
+        <div className="header-right">
+          <span className="gold-amount">Gold: {currentGoldAmount}</span>
+          <img src={headerRight} alt="Right Header" />
+        </div>
+      </header>
 
-      <div className="TaskBoard">
-        <button type="button" onClick={() => setShowOverdue(!showOverdue)}>
-          Toggle Overdue Tasks
-        </button>
-        <button
-          type="button"
-          onClick={() => setShowTodayTasks(!showTodayTasks)}
-        >
-          Toggle Day Tasks
-        </button>
-        <button type="button" onClick={() => setShowActive(!showActive)}>
-          Toggle Active Tasks
-        </button>
-        <button type="button" onClick={() => setShowComplete(!showComplete)}>
-          Toggle Complete Tasks
-        </button>
+      <div className="main-content">
+        <aside className="sidebar left-sidebar" />
 
-        <button
-          className="createTask"
-          type="button"
-          style={{
-            backgroundSize: "cover",
-            backgroundColor: "transparent",
-            width: "112px",
-            height: "105px",
-            placeItems: "center",
-            border: "none",
-            outline: "none",
-          }}
-          onClick={() => new_task()}
-        >
+        <section className="content">
+          <div className="game-scene">
+            <img src={character} alt="Character" className="character" />
+            <img
+              src={images[currentImage]}
+              alt="Boss Sprite"
+              className="dragon"
+            />
+          </div>
+
+          <div className="ui-overlay">
+            <img src={panelBg} alt="Panel Background" className="panel-bg" />
+
+            <div
+              className="overlay-content"
+              style={{
+                position: "absolute",
+                top: "10%",
+                left: "5%",
+                width: "90%",
+                height: "80%",
+                pointerEvents: "auto",
+              }}
+            >
+              <TaskForm
+                callback={handleSave}
+                task={editTask}
+                active={showEditor}
+                cancel_callback={cancel_editor}
+              />
+
+              <TaskList
+                name="Overdue Tasks"
+                action={true}
+                active={showOverdue}
+                tasks={overdueTasks}
+                delete_handle={delete_task}
+                edit_handle={set_edit_task}
+                complete_handle={complete_task}
+              />
+              <TaskList
+                name={filterName}
+                action={true}
+                active={showTodayTasks}
+                tasks={filterTasks}
+                delete_handle={delete_task}
+                edit_handle={set_edit_task}
+                complete_handle={complete_task}
+              />
+              <TaskList
+                name="Active Tasks"
+                action={true}
+                active={showActive}
+                tasks={activeTasks}
+                delete_handle={delete_task}
+                edit_handle={set_edit_task}
+                complete_handle={complete_task}
+              />
+              <TaskList
+                name="Complete Tasks"
+                action={false}
+                active={showComplete}
+                tasks={completeTasks}
+              />
+            </div>
+          </div>
+        </section>
+
+        <aside className="sidebar right-sidebar">
           <img
-            src={addTaskButton}
-            style={{ width: "100%", height: "100%", placeItems: "center" }}
-          ></img>
-        </button>
-      </div>
+            src={btnUpDown}
+            alt="Reorder Button"
+            className="button-updown"
+            onClick={() => setShowTogglePopup(!showTogglePopup)}
+          />
 
-      <hr />
-      <span>
-        Sort by:
-        <select
-          value={prioritySort ? "P" : "H"}
-          onChange={(e) => updateSorting(e)}
-        >
-          <option value="P">Priority</option>
-          <option value="H">Due Date</option>
-        </select>
-      </span>
-      <br />
-      <span>
-        View Tasks on day:
-        <input
-          type="date"
-          value={computeFieldDate(filterDate)}
-          onChange={(e) => {
-            setFilterDate(new Date(e.target.value));
-          }}
-        />
-      </span>
-      <hr />
-      <TaskForm
-        callback={handleSave}
-        task={editTask}
-        active={showEditor}
-        cancel_callback={cancel_editor}
-      />
-      <TaskList
-        name="Overdue Tasks"
-        action={true}
-        active={showOverdue}
-        tasks={overdueTasks}
-        delete_handle={delete_task}
-        edit_handle={set_edit_task}
-        complete_handle={complete_task}
-      />
-      <TaskList
-        name={filterName /* TaskList for task for a certain day*/}
-        action={true}
-        active={showTodayTasks}
-        tasks={filterTasks}
-        delete_handle={delete_task}
-        edit_handle={set_edit_task}
-        complete_handle={complete_task}
-      />
-      <TaskList
-        name="Active Tasks"
-        action={true}
-        active={showActive}
-        tasks={activeTasks}
-        delete_handle={delete_task}
-        edit_handle={set_edit_task}
-        complete_handle={complete_task}
-      />
-      <TaskList
-        name="Complete Tasks"
-        action={false}
-        active={showComplete}
-        tasks={completeTasks}
-      />
+          {showTogglePopup && (
+            <div className="toggle-popup">
+              <button onClick={() => setShowOverdue(!showOverdue)}>
+                Toggle Overdue Tasks
+              </button>
+              <button onClick={() => setShowTodayTasks(!showTodayTasks)}>
+                Toggle Day Tasks
+              </button>
+              <button onClick={() => setShowActive(!showActive)}>
+                Toggle Active Tasks
+              </button>
+            </div>
+          )}
+
+          <button
+            className="createTask"
+            type="button"
+            onClick={new_task}
+            style={{
+              backgroundSize: "cover",
+              backgroundColor: "transparent",
+              width: "100%",
+              placeItems: "center",
+              border: "none",
+              outline: "none",
+            }}
+          >
+            <img src={btnAdd} alt="Add Task Button" className="button-add" />
+          </button>
+          <div>
+            <ShopTab
+              enemyHealth={enemyHealth}
+              currentGoldAmount={currentGoldAmount}
+              damageAmount={damageAmount}
+              setCurrentGoldAmount={setCurrentGoldAmount}
+              setDamageAmount={setDamageAmount}
+              currentImage={currentImage}
+              images={images}
+              setEnemyHealth={setEnemyHealth}
+              setCurrentImage={setCurrentImage}
+            ></ShopTab>
+          </div>
+          <div>
+            <SaveWindow></SaveWindow>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }
