@@ -42,7 +42,65 @@ export function damageEnemy(
 
     if (newHealth === 0 && currentImage < images.length) {
       setTimeout(() => {
-        setCurrentImage((prevIndex) => prevIndex + 1);
+        setCurrentImage((prevIndex) => (prevIndex + 1) % images.length);
+        setEnemyHealth(100);
+        giveGold(setCurrentGoldAmount);
+      }, 500);
+    }
+    //setLocalStorage("bossHealth", newHealth as any as string);
+    return newHealth;
+  });
+}
+
+export function damageEnemyShop(
+  damageAmount: number,
+  currentImage: number,
+  images: string[],
+  setEnemyHealth: React.Dispatch<React.SetStateAction<number>>,
+  setCurrentImage: React.Dispatch<React.SetStateAction<number>>,
+  setCurrentGoldAmount: React.Dispatch<React.SetStateAction<number>>,
+  currentGoldAmount: number
+) {
+  setEnemyHealth((prev) => {
+    let newHealth = prev;
+    if (currentGoldAmount >= 40) {
+      newHealth = Math.max(0, prev - damageAmount);
+      setCurrentGoldAmount((prevGold) => prevGold - 40);
+      console.log("Updated Health: ", newHealth);
+    }
+
+    if (newHealth === 0 && currentImage < images.length) {
+      setTimeout(() => {
+        setCurrentImage((prevIndex) => (prevIndex + 1) % images.length);
+        setEnemyHealth(100);
+        giveGold(setCurrentGoldAmount);
+      }, 500);
+    }
+    //setLocalStorage("bossHealth", newHealth as any as string);
+    return newHealth;
+  });
+}
+
+export function defeatEnemy(
+  damageAmount: number,
+  currentImage: number,
+  images: string[],
+  setEnemyHealth: React.Dispatch<React.SetStateAction<number>>,
+  setCurrentImage: React.Dispatch<React.SetStateAction<number>>,
+  setCurrentGoldAmount: React.Dispatch<React.SetStateAction<number>>,
+  currentGoldAmount: number
+) {
+  setEnemyHealth((prev) => {
+    let newHealth = prev;
+    if (currentGoldAmount >= 60) {
+      newHealth = 0;
+      setCurrentGoldAmount((prevGold) => prevGold - 60);
+      console.log("Updated Health: ", newHealth);
+    }
+
+    if (newHealth === 0 && currentImage < images.length) {
+      setTimeout(() => {
+        setCurrentImage((prevIndex) => (prevIndex + 1) % images.length);
         setEnemyHealth(100);
         giveGold(setCurrentGoldAmount);
       }, 500);
