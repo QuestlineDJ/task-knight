@@ -18,10 +18,6 @@ function SaveWindow() {
       {isOpen ? (
         <div className="modal_container">
           <div className="modal">
-            <p className="close-popup" onClick={() => setOpen(false)}>
-              X
-            </p>
-
             <p className="delete-all-saved-data-button">
               <DeleteAllSavedDataButton />
             </p>
@@ -29,6 +25,9 @@ function SaveWindow() {
             <div className="content">
               <h2>TEST</h2>
             </div>
+            <button className="close-popup" onClick={() => setOpen(false)}>
+              X
+            </button>
 
             <li className="button">
               <SaveButton />

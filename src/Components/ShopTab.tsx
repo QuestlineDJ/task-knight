@@ -40,13 +40,13 @@ function ShopTab({
       {isOpen ? (
         <div className="modal_container">
           <div className="modal">
-            <p className="close-popup" onClick={() => setOpen(false)}>
-              X
-            </p>
             <div className="content">
               <h2>Welcome To The Shop!</h2>
               <p>Gold: {currentGoldAmount}</p>
             </div>
+            <p className="close-popup" onClick={() => setOpen(false)}>
+              X
+            </p>
             <button
               className="option-button"
               onClick={() =>
