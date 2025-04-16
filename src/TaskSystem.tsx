@@ -13,6 +13,7 @@ import panelBg from "./assets/Task Knight Assets/Main Panel/Task Panel/panel_tas
 
 import btnUpDown from "./assets/Task Knight Assets/Main Panel/Task Panel/sortButton.png";
 import btnAdd from "./assets/Task Knight Assets/Main Panel/Task Panel/addButton.png";
+import { getLocalStorage } from "./LocalStorageManager";
 
 import {
   Task,
@@ -29,7 +30,8 @@ import {
   getCompleteTasksFromStorage,
 } from "./TaskUtilities";
 
-import { increasePlayerDamage, giveGold, damageEnemy } from "./GameHelper";
+import {damageEnemy, setPlayerDamageFromLocalStorage, LoadGameData, setEnemyHealthFromLocalStorage, setGoldFromStorage, setImageFromStorage } from "./GameHelper";
+
 import ShopTab from "./Components/ShopTab";
 
 import { TaskForm } from "./TaskForm";
@@ -232,6 +234,16 @@ export default function TaskSystem() {
     setFilterTasks(createFilterTasks(newActiveTasks, filterDate));
     setOverdueTasks(createOverdueList(newActiveTasks));
   }
+  
+  function onLoadHandler()
+  {
+    LoadGameData();
+    setPlayerDamageFromLocalStorage(setDamageAmount, damageAmount);
+    setEnemyHealthFromLocalStorage(setEnemyHealth);
+    setGoldFromStorage(setCurrentGoldAmount);
+    setImageFromStorage(setCurrentImage);
+  }
+  window.onload = onLoadHandler;
 
   // --- RENDER UI + LOGIC ---
   return (

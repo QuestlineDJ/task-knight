@@ -1,6 +1,7 @@
-import { useState } from "react";
-import SaveButton from "./SaveButton";
-import { loadFile } from "../LocalStorageManager";
+import { useState } from 'react';
+import SaveButton from './SaveButton';
+import DeleteAllSavedDataButton from './DeleteAllSavedDataButton';
+import { loadFile } from '../LocalStorageManager';
 
 function SaveWindow() {
   const [isOpen, setOpen] = useState(false);

@@ -179,6 +179,13 @@ html, body, #root {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
 }
 
+
 .close-popup:hover {
   background-color: #ccc;
+}
+.delete-all-saved-data-button {
+  position: absolute;
+  bottom: -5px;
+  left: 5px;
+
 }
