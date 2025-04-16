@@ -242,23 +242,12 @@ export function TaskMaster() {
           damageAmount={damageAmount}
           setCurrentGoldAmount={setCurrentGoldAmount}
           setDamageAmount={setDamageAmount}
+          currentImage={currentImage}
+          images={images}
+          setEnemyHealth={setEnemyHealth}
+          setCurrentImage={setCurrentImage}
         ></ShopTab>
         <p>Gold: {currentGoldAmount}</p>
-        <p>
-          <button
-            type="button"
-            onClick={() =>
-              increasePlayerDamage(
-                currentGoldAmount,
-                setCurrentGoldAmount,
-                setDamageAmount,
-                damageAmount
-              )
-            }
-          >
-            Increase Damage +10: Requires 10 Gold
-          </button>
-        </p>
         {enemyHealth > 0 ? (
           <img src={images[currentImage]} alt="Enemy Indicator" />
         ) : currentImage < images.length - 1 ? (
