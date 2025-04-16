@@ -2,7 +2,7 @@ import { useState, useId, SetStateAction } from "react";
 import redDragon from "./images/boss_dragon.png";
 import blueDragon from "./images/boss_dragon_blue.png";
 import purpleDragon from "./images/boss_dragon_purple.png";
-import { setLocalStorage } from "./LocalStorageManager";
+import { deleteAllLocalStorage, setLocalStorage } from "./LocalStorageManager";
 import addTaskButton from "./assets/Task Knight Assets/Main Panel/Task Panel/addButton.png";
 import taskBoard from "./assets/Task Knight Assets/Main Panel/Task Panel/panel_tasks.png";
 
@@ -21,7 +21,7 @@ import {
   getActiveTasksFromStorage,
   getCompleteTasksFromStorage,
 } from "./TaskUtilities";
-import { increasePlayerDamage, giveGold, damageEnemy, setPlayerDamageFromLocalStorage, LoadGameData } from "./GameHelper";
+import {damageEnemy, setPlayerDamageFromLocalStorage, LoadGameData, setEnemyHealthFromLocalStorage, setGoldFromStorage, setImageFromStorage } from "./GameHelper";
 import ShopTab from "./Components/ShopTab";
 
 import { TaskForm } from "./TaskForm";
@@ -226,9 +226,12 @@ export function TaskMaster() {
   
   function onLoadHandler()
   {
+    //deleteAllLocalStorage(); //DELETE LOCAL STORAGE (to clear testing values)
     LoadGameData();
     setPlayerDamageFromLocalStorage(setDamageAmount, damageAmount);
-    console.log(damageAmount);
+    setEnemyHealthFromLocalStorage(setEnemyHealth);
+    setGoldFromStorage(setCurrentGoldAmount);
+    setImageFromStorage(setCurrentImage);
   }
   window.onload = onLoadHandler;
 

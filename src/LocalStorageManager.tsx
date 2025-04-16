@@ -87,16 +87,21 @@ export function saveFile() {
     dataMap.forEach((value, key) => {
         if (key.startsWith("active.") || key.startsWith("complete.")) {
             // Discard prefix
-            var taskid = Number(key.slice("active.".length));
+            var taskID = -1;
+            if (key.startsWith("active."))
+                taskID = Number(key.slice("active.".length));
+            else
+                taskID = Number(key.slice("complete.".length));
+            
             var dataValue: TaskStorage = JSON.parse(value);
 
-            privateNonlocalTaskData += JSON.stringify(new Task(dataValue.name, dataValue.priority, dataValue.due_time, taskid));
+            privateNonlocalTaskData += JSON.stringify(new Task(dataValue.name, dataValue.priority, dataValue.due_time, taskID));
         }
         if (key === "game.data")
         {
             var dataVal: GameData = JSON.parse(value);
 
-            privateNonlocalGameData += JSON.stringify(new GameData(dataVal.gold, dataVal.attack, dataVal.bossHealth));
+            privateNonlocalGameData += JSON.stringify(new GameData(dataVal.gold, dataVal.attack, dataVal.bossHealth, dataVal.currentImage));
         }
     });
     console.log(privateNonlocalTaskData);
@@ -172,7 +177,7 @@ export function loadFile(event: React.ChangeEvent<HTMLInputElement>) {
                 taskDataArray[i].id, taskDataArray[i].creation_time, taskDataArray[i].done_time,
                 taskDataArray[i].task_type), taskDataArray[i].task_type);
         }
-        saveGameDataToStorage(new GameData(gameDataArray.gold, gameDataArray.attack, gameDataArray.bossHealth));
+        saveGameDataToStorage(new GameData(gameDataArray.gold, gameDataArray.attack, gameDataArray.bossHealth, gameDataArray.currentImage));
     };
 
     if (!fileInput.files) {
