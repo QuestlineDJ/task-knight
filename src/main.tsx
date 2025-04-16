@@ -4,6 +4,7 @@ import { TaskMaster } from "./TaskSystem";
 import "./main.css";
 import SaveWindow from "./Components/SaveWindow";
 import ShopTab from "./Components/ShopTab";
+import { loadedFromFile } from "./LocalStorageManager";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -20,11 +21,14 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 );
 
 const beforeUnloadHandler = (event: any) => {
-  // Recommended
-  event.preventDefault();
+  //If saved data was loaded from file, ask to save data before leaving
+  if (loadedFromFile) {
+    // Recommended
+    event.preventDefault();
 
-  // Included for legacy support, e.g. Chrome/Edge < 119
-  event.returnValue = true;
+    // Included for legacy support, e.g. Chrome/Edge < 119
+    event.returnValue = true;
+  }
 };
 
 window.addEventListener("beforeunload", beforeUnloadHandler);

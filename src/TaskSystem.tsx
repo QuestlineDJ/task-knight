@@ -2,7 +2,7 @@ import { useState, useId, SetStateAction } from "react";
 import redDragon from "./images/boss_dragon.png";
 import blueDragon from "./images/boss_dragon_blue.png";
 import purpleDragon from "./images/boss_dragon_purple.png";
-import { deleteAllLocalStorage, setLocalStorage } from "./LocalStorageManager";
+import { getLocalStorage } from "./LocalStorageManager";
 import addTaskButton from "./assets/Task Knight Assets/Main Panel/Task Panel/addButton.png";
 import taskBoard from "./assets/Task Knight Assets/Main Panel/Task Panel/panel_tasks.png";
 
@@ -226,7 +226,6 @@ export function TaskMaster() {
   
   function onLoadHandler()
   {
-    //deleteAllLocalStorage(); //DELETE LOCAL STORAGE (to clear testing values)
     LoadGameData();
     setPlayerDamageFromLocalStorage(setDamageAmount, damageAmount);
     setEnemyHealthFromLocalStorage(setEnemyHealth);

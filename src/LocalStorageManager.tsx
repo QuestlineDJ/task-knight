@@ -19,6 +19,8 @@ import { saveTaskToStorage, Task, TaskType, TaskStorage } from "./TaskUtilities"
 
 const IS_DEBUGGING = false;
 
+export var loadedFromFile: boolean = false;
+
 /**
  * Creates a cookie with a specified name and value
  * @param {string} name The name of the cookie to create
@@ -86,16 +88,31 @@ export function saveFile() {
     //Sends data into a string
     dataMap.forEach((value, key) => {
         if (key.startsWith("active.") || key.startsWith("complete.")) {
-            // Discard prefix
             var taskID = -1;
             if (key.startsWith("active."))
+            {
+                // Discard prefix
                 taskID = Number(key.slice("active.".length));
-            else
-                taskID = Number(key.slice("complete.".length));
-            
-            var dataValue: TaskStorage = JSON.parse(value);
 
-            privateNonlocalTaskData += JSON.stringify(new Task(dataValue.name, dataValue.priority, dataValue.due_time, taskID));
+                //Gets value
+                var dataValue: TaskStorage = JSON.parse(value);
+
+                //Adds it to the saved data as a string
+                privateNonlocalTaskData += JSON.stringify(new Task(dataValue.name, dataValue.priority, dataValue.due_time, taskID, 
+                    dataValue.creation_time, dataValue.done_time, TaskType.Active));
+            }
+            else
+            {
+                //Discards prefix
+                taskID = Number(key.slice("complete.".length));
+
+                //Gets value
+                var dataValue: TaskStorage = JSON.parse(value);
+
+                //Adds it to the saved data as a string
+                privateNonlocalTaskData += JSON.stringify(new Task(dataValue.name, dataValue.priority, dataValue.due_time, taskID, 
+                    dataValue.creation_time, dataValue.done_time, TaskType.Complete));
+            }
         }
         if (key === "game.data")
         {
@@ -178,6 +195,9 @@ export function loadFile(event: React.ChangeEvent<HTMLInputElement>) {
                 taskDataArray[i].task_type), taskDataArray[i].task_type);
         }
         saveGameDataToStorage(new GameData(gameDataArray.gold, gameDataArray.attack, gameDataArray.bossHealth, gameDataArray.currentImage));
+        //Data was loaded from file. Keeps track of it for when leaving
+        location.reload();
+        loadedFromFile = true;
     };
 
     if (!fileInput.files) {
