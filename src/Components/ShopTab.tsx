@@ -54,7 +54,8 @@ function ShopTab({
                   currentGoldAmount,
                   setCurrentGoldAmount,
                   setDamageAmount,
-                  damageAmount
+                  damageAmount,
+                  currentGoldAmount
                 )
               }
             >
