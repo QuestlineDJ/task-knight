@@ -49,6 +49,7 @@ import SaveButton from "./Components/SaveButton";
 import SaveWindow from "./Components/SaveWindow";
 
 const images = [dragon, dragon2, dragon3];
+const index = 0;
 
 export default function TaskSystem() {
   const overdue_check_timeout = 30 * 1000;
@@ -254,6 +255,19 @@ export default function TaskSystem() {
     setImageFromStorage(setCurrentImage);
   }
 
+  function toggleData() {
+    if (showTodayTasks) {
+      setShowTodayTasks(false);
+      setShowOverdue(true);
+    } else if (showOverdue) {
+      setShowOverdue(false);
+      setShowActive(true);
+    } else if (showActive) {
+      setShowActive(false);
+      setShowTodayTasks(true);
+    }
+  }
+
   window.onload = onLoadHandler;
 
   // --- RENDER UI + LOGIC ---
@@ -344,23 +358,8 @@ export default function TaskSystem() {
             src={btnUpDown}
             alt="Reorder Button"
             className="button-updown"
-            onClick={() => setShowTogglePopup(!showTogglePopup)}
+            onClick={() => toggleData()}
           />
-
-          {showTogglePopup && (
-            <div className="toggle-popup">
-              <button onClick={() => setShowOverdue(!showOverdue)}>
-                Toggle Overdue Tasks
-              </button>
-              <button onClick={() => setShowTodayTasks(!showTodayTasks)}>
-                Toggle Day Tasks
-              </button>
-              <button onClick={() => setShowActive(!showActive)}>
-                Toggle Active Tasks
-              </button>
-            </div>
-          )}
-
           <button
             className="createTask"
             type="button"
@@ -397,3 +396,21 @@ export default function TaskSystem() {
     </div>
   );
 }
+
+/*
+Hi hi this was the previous showToggle stuff. I didn't want to delete it but I did want to comment it out
+So here it is down here.
+{showTogglePopup && (
+            <div className="toggle-popup">
+              <button onClick={() => setShowOverdue(!showOverdue)}>
+                Toggle Overdue Tasks
+              </button>
+              <button onClick={() => setShowTodayTasks(!showTodayTasks)}>
+                Toggle Day Tasks
+              </button>
+              <button onClick={() => setShowActive(!showActive)}>
+                Toggle Active Tasks
+              </button>
+            </div>
+          )}
+            */
