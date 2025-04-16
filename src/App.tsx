@@ -1,6 +1,5 @@
 import React from "react";
 
-// Image imports (placeholders - replace with your own)
 import headerLeft from "./assets/Task Knight Assets/Corner UI/emptyLevelBadge.png";
 import headerRight from "./assets/Task Knight Assets/Corner UI/goldBag.png";
 

@@ -1,6 +1,6 @@
 import React from "react";
+import TaskSystem from "./TaskSystem"; // or { TaskSystem } if you used a named export
 
-// Image imports (placeholders - replace with your own)
 import headerLeft from "./assets/Task Knight Assets/Corner UI/emptyLevelBadge.png";
 import headerRight from "./assets/Task Knight Assets/Corner UI/goldBag.png";
 
@@ -13,13 +13,6 @@ import listItemBg from "./assets/Task Knight Assets/Main Panel/Task Panel/taskBa
 import btnUpDown from "./assets/Task Knight Assets/Main Panel/Task Panel/sortButton.png";
 import btnAdd from "./assets/Task Knight Assets/Main Panel/Task Panel/addButton.png";
 
-const tasks: string[] = [
-  "Take Out the Trash",
-  "Clean Container",
-  "Replace Bag",
-  "Finish Doing Laundry",
-  "Finish Math Homework",
-];
 function UI() {
   return (
     <div className="app-container">
@@ -39,18 +32,9 @@ function UI() {
 
           <div className="ui-overlay">
             <img src={panelBg} alt="Panel Background" className="panel-bg" />
-            <div className="task-list">
-              {tasks.map((task, index) => (
-                <div key={index} className="task-item">
-                  <img
-                    src={listItemBg}
-                    alt="Task Background"
-                    className="list-item-bg"
-                  />
-                  <span className="task-text">{task}</span>
-                </div>
-              ))}
-            </div>
+
+            {/* This is where TaskSystem will render */}
+            <TaskSystem />
           </div>
         </section>
 
