@@ -56,8 +56,8 @@ export default function TaskSystem() {
 
   // React state variables that control showing certain task lists
   const [showEditor, setShowEditor] = useState(false);
-  const [showActive, setShowActive] = useState(false);
-  const [showTodayTasks, setShowTodayTasks] = useState(true);
+  const [showActive, setShowActive] = useState(true);
+  const [showTodayTasks, setShowTodayTasks] = useState(false);
   const [showOverdue, setShowOverdue] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
 
@@ -303,7 +303,7 @@ export default function TaskSystem() {
               style={{
                 position: "absolute",
                 top: "10%",
-                left: "5%",
+                left: "40%",
                 width: "90%",
                 height: "80%",
                 pointerEvents: "auto",
