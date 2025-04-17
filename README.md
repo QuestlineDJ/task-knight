@@ -10,7 +10,7 @@ npm install # install dependancies
 npm run build # compile the project
 npm run deploy # run localhost webserver
 ```
-After running the above command open your browser and enter the url outputed by `npm run deplay`.
+After running the above command open your browser and enter the url outputed by `npm run deploy`.
 
 
 ### Other IDEs
