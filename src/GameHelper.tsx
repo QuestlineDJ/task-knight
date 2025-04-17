@@ -356,7 +356,7 @@ export function damageEnemy(
         sendGameDataToLocalStorage();
 
         giveGold(setCurrentGoldAmount);
-      }, 500);
+      }, 100);
     }
 
     return newHealth;

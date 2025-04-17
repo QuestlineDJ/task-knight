@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Task } from './TaskUtilities'
+import { useState } from "react";
+import { Task } from "./TaskUtilities";
 
 /**
  * Create react component that display a task
@@ -11,7 +11,7 @@ export function TaskDisplay({
   edit_handle,
   complete_handle,
 }: any) {
-   // Create the buttons that allow for editing, deleting, and completing
+  // Create the buttons that allow for editing, deleting, and completing
   let action_buttons = (
     <span>
       <button
@@ -20,7 +20,7 @@ export function TaskDisplay({
           edit_handle(task);
         }}
       >
-        E
+        Edit
       </button>
       <button
         type="button"
@@ -28,7 +28,7 @@ export function TaskDisplay({
           complete_handle(task.id);
         }}
       >
-        C
+        Complete
       </button>
       <button
         type="button"
@@ -36,15 +36,19 @@ export function TaskDisplay({
           delete_handle(task.id);
         }}
       >
-        D
+        Delete
       </button>
     </span>
   );
 
   return (
     <div>
-      <span>{task.name}</span>,<span>{task.priority}</span>,
-      <span>{task.due_time}</span>
+      <span>{task.name}</span>
+      <br></br>
+      <span>Priority: {task.priority}</span>
+      <br></br>
+      <span>Time Due: {task.due_time}</span>
+      <br></br>
       {action == true ? action_buttons : null}
     </div>
   );
