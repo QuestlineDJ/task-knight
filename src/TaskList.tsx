@@ -1,5 +1,6 @@
-import { Task } from './TaskUtilities'
-import { TaskDisplay } from './TaskDisplay'
+import { Task } from "./TaskUtilities";
+import { TaskDisplay } from "./TaskDisplay";
+import taskBanner from "./assets/Task Knight Assets/Main Panel/Task Panel/taskBackground.png";
 
 /**
  * Create react component that holds a list of tasks
@@ -18,7 +19,7 @@ export function TaskList({
     return <></>;
   }
 
-   // Create react components for each task
+  // Create react components for each task
   const list_of_tasks = tasks.map((task: Task) => (
     <TaskDisplay
       key={task.id}

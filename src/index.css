@@ -101,6 +101,13 @@ html, body, #root {
 .task-item {
   position: relative;
   margin-bottom: 1rem;
+  transform: translateX(-50%);
+}
+
+.task-banner{
+  position: relative;
+  width: 90%;
+  left: 15%;
 }
 
 .list-item-bg {
@@ -110,11 +117,11 @@ html, body, #root {
 
 .task-text {
   position: absolute;
-  top: 50%;
-  left: 2%;
+  top: 60%;
+  left: 20%;
   transform: translateY(-50%);
   font-family: 'Comic Sans MS', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 /* === RIGHT BUTTONS === */
