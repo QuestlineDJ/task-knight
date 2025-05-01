@@ -196,6 +196,8 @@ export function saveFile() {
 
     if (key === "game.data") {
       var dataVal: GameData = JSON.parse(value);
+      console.log("Local storage debug:");
+      console.log(dataVal);
 
       privateNonlocalGameData += JSON.stringify(
         new GameData(
