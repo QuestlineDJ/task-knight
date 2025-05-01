@@ -331,6 +331,7 @@ export function damageEnemy(
   setEnemyHealth((prev) => {
     const newHealth = Math.max(0, prev - damageAmount);
 
+   console.log(gameData);
     gameData.bossHealth = newHealth; //Saves health into gameData
 
     sendGameDataToLocalStorage();
