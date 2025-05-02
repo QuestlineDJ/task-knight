@@ -6,43 +6,30 @@ import DeleteAllSavedDataButton from "./DeleteAllSavedDataButton";
 
 import { loadFile } from "../LocalStorageManager";
 
+import "../SaveScreen.css";
+
 function SaveWindow() {
-  const [isOpen, setOpen] = useState(false);
-
   return (
-    <>
-      <button className="open-screen-button" onClick={() => setOpen(!isOpen)}>
-        Toggle Save Screen
-      </button>
+    <div className="scale">
+      <p className="delete-all-saved-data-button">
+        <DeleteAllSavedDataButton />
+      </p>
 
-      {isOpen ? (
-        <div className="modal_container">
-          <div className="modal">
-            <p className="delete-all-saved-data-button">
-              <DeleteAllSavedDataButton />
-            </p>
+      <aside className="scale heading">
+        <img src="src\images\saveScreen\saved_banner.png"></img>
+      </aside>
 
-            <div className="content">
-              <h2>TEST</h2>
-            </div>
-            <button className="close-popup" onClick={() => setOpen(false)}>
-              X
-            </button>
+      <div className="button scale download">
+        <SaveButton />
+      </div>
 
-            <li className="button">
-              <SaveButton />
-            </li>
-
-            <input
-              type="file"
-              accept=".txt"
-              className="button"
-              onChange={loadFile}
-            ></input>
-          </div>
-        </div>
-      ) : null}
-    </>
+      <input
+        type="file"
+        accept=".txt"
+        className="button scale upload"
+        onChange={loadFile}
+      ></input>
+    </div>
   );
 }
 

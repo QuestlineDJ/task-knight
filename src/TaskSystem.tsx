@@ -14,8 +14,6 @@ import panelBg from "./assets/Task Knight Assets/Main Panel/Task Panel/panel_tas
 import btnUpDown from "./assets/Task Knight Assets/Main Panel/Task Panel/sortButton.png";
 import btnAdd from "./assets/Task Knight Assets/Main Panel/Task Panel/addButton.png";
 
-import { getLocalStorage } from "./LocalStorageManager";
-
 import {
   Task,
   getCurrentTime,
@@ -45,7 +43,7 @@ import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";
 
 import "./index.css";
-import SaveButton from "./Components/SaveButton";
+import "./SaveScreen.css";
 import SaveWindow from "./Components/SaveWindow";
 
 const images = [dragon, dragon2, dragon3];
@@ -60,6 +58,7 @@ export default function TaskSystem() {
   const [showTodayTasks, setShowTodayTasks] = useState(false);
   const [showOverdue, setShowOverdue] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
+  const [isSaveWindowOpen, setSaveWindowOpen] = useState(false);
 
   // React state variables that control enemy
   const [enemyHealth, setEnemyHealth] = useState<number>(100);
@@ -297,7 +296,6 @@ export default function TaskSystem() {
 
           <div className="ui-overlay">
             <img src={panelBg} alt="Panel Background" className="panel-bg" />
-
             <div
               className="overlay-content"
               style={{
@@ -349,6 +347,8 @@ export default function TaskSystem() {
                 active={showComplete}
                 tasks={completeTasks}
               />
+
+              {isSaveWindowOpen ? (<SaveWindow />) : null}
             </div>
           </div>
         </section>
@@ -388,9 +388,9 @@ export default function TaskSystem() {
               setCurrentImage={setCurrentImage}
             ></ShopTab>
           </div>
-          <div>
-            <SaveWindow></SaveWindow>
-          </div>
+          <button className="open-screen-button" onClick={() => setSaveWindowOpen(!isSaveWindowOpen)}>
+            Toggle Save Screen
+          </button>
         </aside>
       </div>
     </div>

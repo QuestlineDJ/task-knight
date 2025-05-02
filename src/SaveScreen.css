@@ -1,0 +1,42 @@
+.scale {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-size: cover;
+}
+
+.heading {
+    position: absolute;
+    top: 0%;
+    left: -23%;
+    width: 70%;
+    height: 80%;
+    pointer-events: auto;
+}
+
+.download {
+    position: absolute;
+    top: 30%;
+    left: -23%;
+    width: 30%;
+    height: 80%;
+    pointer-events: auto;
+}
+
+.upload {
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    width: 30%;
+    height: 60%;
+    pointer-events: auto;
+    background: url("src/images/saveScreen/upload_button.png");
+}
+
+::file-selector-button {
+    opacity: 0%;
+}
+
+input[type='file'] {
+    color: transparent;
+}
