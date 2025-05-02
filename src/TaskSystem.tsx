@@ -307,7 +307,7 @@ export default function TaskSystem() {
                 pointerEvents: "auto",
               }}
             >
-              <TaskForm
+              {isSaveWindowOpen ? (<SaveWindow />) : <><TaskForm
                 callback={handleSave}
                 task={editTask}
                 active={showEditor}
@@ -346,9 +346,7 @@ export default function TaskSystem() {
                 action={false}
                 active={showComplete}
                 tasks={completeTasks}
-              />
-
-              {isSaveWindowOpen ? (<SaveWindow />) : null}
+              /></>}
             </div>
           </div>
         </section>

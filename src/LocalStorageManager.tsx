@@ -1,33 +1,18 @@
 /**
-
  * Summary: Manages cookies in a server.
-
  * The creation of cookies, editing of cookies, and deletion of cookies are the same process.
-
- *
-
+ * 
  * When creating a cookie, you need to give it a name, value, (optional) expiration date, and (optional) path
-
  * When editing a cookie, you create a new cookie. If a cookie with the same name already exists, it replaces it
-
  * When deleting a cookie, you can set the expiration date to a past date.
-
  *
-
  * If an expiration date is not provided, the cookie is deleted immediately when the broswer closes.
-
  * I didn't do too much research on it, but that sounds kind of useless, if we want the cookie to persist.
-
  *
-
  * If the path is not provided, the cookie is only viewable by the current domain (the website).
-
  * I don't think we need our cookies to be viewed outside the website, so I elected to leave it unprovided.
-
  *
-
  * Author: Ryan Herwig
-
  */
 
 import { GameData, saveGameDataToStorage } from "./GameHelper";
@@ -44,13 +29,9 @@ const IS_DEBUGGING = false;
 export var loadedFromFile: boolean = false;
 
 /**
-
  * Creates a cookie with a specified name and value
-
  * @param {string} name The name of the cookie to create
-
  * @param {string} value The value to be stored inside the cookie
-
  */
 
 export function setLocalStorage(key: string, value: string) {
@@ -58,31 +39,26 @@ export function setLocalStorage(key: string, value: string) {
 }
 
 /**
-
  * Finds the cookie data and reads it based off the key provided
-
  * @param {string} cookie_name - the key of the cookie
-
  * @returns string - the value inside the key
-
  */
 
 export function getLocalStorage(key: string) {
   if (key != "HashData" || IS_DEBUGGING)
     //Reserved Word
-
-    return localStorage.getItem(key);
-  else return "";
+    if (key != "HashData" || IS_DEBUGGING) //Reserved Word
+      return localStorage.getItem(key);
+    else
+      return "";
 }
 
 // TODO: talk with Ryan about possibility of this implementation
-
 export function getAllMappedLocalStorage(): Map<string, string> {
   var data = new Map();
 
   for (var i = 0; i < localStorage.length; i++) {
     //If key is not null
-
     if (
       localStorage.key(i) != "null" &&
       (localStorage.key(i) != "HashData" || IS_DEBUGGING)
@@ -97,25 +73,14 @@ export function getAllMappedLocalStorage(): Map<string, string> {
   return data;
 }
 
-export function getAllLocalStorage() {
-  var data = "";
-
-  //Loops through the local storage contents
-
-  return data;
-}
-
 export function deleteItemLocalStorage(key: string) {
   if (getLocalStorage(key) != "" && getLocalStorage(key) != null)
     localStorage.removeItem(key);
 }
 
 /**
-
  * Deletes ALL local storage related to this webpage
-
  */
-
 export function deleteAllLocalStorage() {
   localStorage.clear();
 }
@@ -125,14 +90,10 @@ var privateNonlocalTaskData = "";
 var privateNonlocalGameData = "";
 
 /**
-
  * Saves the local storage data into a txt file and downloads it onto the computer
-
  */
-
 export function saveFile() {
   //Gets data
-
   var dataMap = getAllMappedLocalStorage();
 
   privateNonlocalTaskData = "";
@@ -140,22 +101,19 @@ export function saveFile() {
   privateNonlocalGameData = "";
 
   //Sends data into a string
-
   dataMap.forEach((value, key) => {
     if (key.startsWith("active.") || key.startsWith("complete.")) {
       var taskID = -1;
 
       if (key.startsWith("active.")) {
-        // Discard prefix
 
+        // Discard prefix
         taskID = Number(key.slice("active.".length));
 
         //Gets value
-
         var dataValue: TaskStorage = JSON.parse(value);
 
         //Adds it to the saved data as a string
-
         privateNonlocalTaskData += JSON.stringify(
           new Task(
             dataValue.name,
@@ -169,16 +127,14 @@ export function saveFile() {
           )
         );
       } else {
-        //Discards prefix
 
+        //Discards prefix
         taskID = Number(key.slice("complete.".length));
 
         //Gets value
-
         var dataValue: TaskStorage = JSON.parse(value);
 
         //Adds it to the saved data as a string
-
         privateNonlocalTaskData += JSON.stringify(
           new Task(
             dataValue.name,
@@ -215,74 +171,54 @@ export function saveFile() {
   var data = encrypt();
 
   //Converts the data to a plain text Blob
-
   //A blob is a raw data type that is immutable. It can be read as binary or as text and can be converted into a ReadableStream.
-
   var dataToBlob = new Blob([data], { type: "text/plain" });
 
   //Converts Blob to a URL link, which acts as the value stored inside the text file
-
   var dataToSaveAsURL = window.URL.createObjectURL(dataToBlob);
 
   //Creates a new link object
-
   var downloadlink = document.createElement("a");
 
   //Names the download file. Makes it a .txt (text) file.
-
   downloadlink.download = "TaskMasterSaveData.txt";
 
   //Adds the URL link to the created link. the contents of the URL link are the local storage
-
   downloadlink.href = dataToSaveAsURL;
 
   //Adds download link to the body of the page
-
   document.body.appendChild(downloadlink);
 
   //Clicks on the link
-
   downloadlink.click();
 
   //Removes link from page
-
   downloadlink.remove();
 }
 
 /**
-
  * Loads the file selected onto the local storage
-
  */
-
-export function loadFile(event: React.ChangeEvent<HTMLInputElement>) {
+export function loadFile(fileInput: File) {
   //Gets the input from the chosen file
 
-  var fileInput = event.target;
-
   //Creates a reader to read a txt file
-
   var reader = new FileReader();
 
   //Once the reader has finished loading the file, get the result
-
   reader.onload = function () {
     //Grabs the read data
-
     var data = reader.result as string;
 
     //Decrypts Data
-
     data = decyrpt(data);
 
     console.log(data); //DEBUG - DELETE LATER
 
     //Creates an array of all tasks
-
     var taskDataArray = new Array();
 
     //Splits tasks by the } bracket
-
     var taskData = data.substring(0, data.indexOf("|"));
 
     var gameData = data.substring(
@@ -296,7 +232,6 @@ export function loadFile(event: React.ChangeEvent<HTMLInputElement>) {
       var index = taskData.indexOf("}");
 
       //Creates a JSON string and pushes it to the array
-
       taskDataArray.push(JSON.parse(taskData.substring(0, index + 1)));
 
       taskData = taskData.substring(index + 1);
@@ -305,7 +240,6 @@ export function loadFile(event: React.ChangeEvent<HTMLInputElement>) {
     var gameDataArray = JSON.parse(gameData);
 
     //Creates tasks from the JSON strings
-
     for (var i = 0; i < taskDataArray.length; i++) {
       saveTaskToStorage(
         new Task(
@@ -333,52 +267,43 @@ export function loadFile(event: React.ChangeEvent<HTMLInputElement>) {
     );
 
     //Data was loaded from file. Keeps track of it for when leaving
-
     location.reload();
 
     loadedFromFile = true;
   };
 
-  if (!fileInput.files) {
+  if (!fileInput) {
     console.error("NUll file detected");
 
     return;
   }
 
   //Have the reader start reading the first file inputted. Ignore all other files.
-
-  reader.readAsText(fileInput.files[0]);
+  console.log(fileInput);
+  reader.readAsText(fileInput);
 }
 
 /**
-
  * Creates local storage data from a certain string format
-
  * This is a helper method, thus this should ONLY be called by LoadFile(event).
-
  */
-
 function editLocalStorageFromFile(data: string) {
   //Nullifies leading white space
-
   while (data.charAt(0) == " ") {
     data = data.substring(1);
   }
 
   //Gets crucial indexes
-
   var indexOfEqualsSign = data.indexOf("=");
 
   var indexOfSemiColon = data.indexOf(";");
 
   //String concatenation
-
   var name = data.substring(0, indexOfEqualsSign);
 
   var value = "";
 
   //If there is a semicolon remaining
-
   if (indexOfSemiColon != -1)
     value = data.substring(indexOfEqualsSign + 1, indexOfSemiColon);
   //No semicolons left
@@ -392,7 +317,6 @@ function editLocalStorageFromFile(data: string) {
 }
 
 //Variables to set up Vigenere Cipher
-
 const alphabet =
   "U+CZN0?`hwW4pjKf:VXSn#L<531/[z_.8}&kbD\"Go7J!(@sHI*e,-g]r2Mi6yPQaOdxFY$R=9T{E%^>cB;vu|)q~ ltmA\\'";
 
@@ -405,18 +329,13 @@ const keyWord = "MaRSBAR";
 const keyLength = keyWord.length;
 
 //Variables to set up salting
-
 //Adds random letters equal to the number
-
 //Iterates through array after every encrypted letter
-
 //Loops back to beginning when it reaches the end
-
 const saltAmountArray = [1, 2, 3, 4, 5];
 
 function encrypt() {
   //Gets the data from the storage
-
   var plainText = privateNonlocalTaskData;
 
   plainText += "|";
@@ -426,7 +345,6 @@ function encrypt() {
   console.log("Plain Text: " + plainText);
 
   //Creates Vigenere Cipher using keyWord
-
   var cipherAlphabets = createCipherAlphabets();
 
   var encyrptedText = "";
@@ -438,26 +356,20 @@ function encrypt() {
   var plainTextIndex = 0;
 
   //Salt Iterator
-
   var saltIterator = 0;
 
   //Takes less time, but slightly more memory
-
   var cipherTextSize = cipherAlphabets.length;
 
   //Loops through the plain text to encrypt it
-
   for (var i = 0; i < plainText.length; i++) {
     //If key index is greater than the end, cycle it back to beginning
-
     if (keyIndex >= cipherTextSize) keyIndex = 0;
 
     //Gets the current letter being encrypted
-
     var letter = plainText.at(i);
 
     //Finds the of the letter in the alphabet
-
     plainTextIndex = alphabet.indexOf(letter as string);
 
     encyrptedText += cipherAlphabets[keyIndex][plainTextIndex];
@@ -465,9 +377,7 @@ function encrypt() {
     beforeSaltEncyrptedText += cipherAlphabets[keyIndex][plainTextIndex];
 
     //Adds salt to encryption
-
     //  - Adds random junk inbetween letters
-
     for (var j = 0; j < saltAmountArray[saltIterator]; j++) {
       var randomChar = Math.floor(Math.random() * alphabet.length);
 
@@ -475,18 +385,15 @@ function encrypt() {
     }
 
     //Increments iterators
-
     keyIndex++;
 
     saltIterator++;
 
     //Resets salt array
-
     if (saltIterator >= saltAmountArray.length) saltIterator = 0;
   }
 
   //DEBUG - print out encypted text
-
   if (IS_DEBUGGING) {
     console.log("Before Salt Encrypted Text: " + beforeSaltEncyrptedText);
 
@@ -494,19 +401,17 @@ function encrypt() {
   }
 
   //Hashing
-
   var hashValue = 0;
 
   for (var i = 0; i < encyrptedText.length; i++) {
     hashValue =
       Math.round(
         (hashValue + alphabet.indexOf(encyrptedText.at(i) as string) / 100) *
-          100
+        100
       ) / 100;
   }
 
   //Increases hash to be equal to the length of the alphabet
-
   var difference = Math.round((hashValue % hashDifference) * 100) / 100;
 
   var addedValue = Math.round((hashDifference - difference) * 100) / 100;
@@ -514,11 +419,9 @@ function encrypt() {
   if (addedValue == hashDifference) addedValue = 0;
 
   //Adds extra letter to the end
-
   encyrptedText += alphabet.at(addedValue * 100);
 
   //Increases hash value by added letter's value
-
   hashValue = Math.round((hashValue + addedValue) * 100) / 100;
 
   setLocalStorage("HashData", hashValue as any as string);
@@ -534,11 +437,9 @@ function encrypt() {
 
 function decyrpt(text: string) {
   //Gets the cipherAlphabet
-
   var cipherAlphabets = createCipherAlphabets();
 
   //Hashes encyrpted text
-
   var hashValue = 0;
 
   for (var i = 0; i < text.length; i++) {
@@ -562,7 +463,6 @@ function decyrpt(text: string) {
   }
 
   //Unsalts the encyption
-
   var plaintext = "";
 
   var encryptedText = "";
@@ -572,9 +472,7 @@ function decyrpt(text: string) {
   var textLength = text.length;
 
   //Removes salt to encryption
-
   //  - Removes the random junk inbetween letters
-
   for (var i = 0; i < textLength; i++) {
     var firstLetter = text.substring(0, 1);
 
@@ -585,11 +483,9 @@ function decyrpt(text: string) {
     encryptedText += firstLetter;
 
     //Increments salt iterator
-
     saltIterator++;
 
     //Resets salt array
-
     if (saltIterator >= saltAmountArray.length) saltIterator = 0;
   }
 
@@ -627,7 +523,6 @@ function decyrpt(text: string) {
 
 function createCipherAlphabets() {
   //Creates Alphabets
-
   var cipherAlphabets = [];
 
   for (var i = 0; i < keyLength; i++) {
@@ -653,12 +548,10 @@ function createCipherAlphabets() {
   }
 
   //DEBUGGING PURPOSES
-
   if (IS_DEBUGGING) {
     var alphaStr = "";
 
     //Prints out Alphabet
-
     for (var i = 0; i < alphabet.length; i++) {
       alphaStr += alphabet.at(i) + " ";
     }
@@ -666,7 +559,6 @@ function createCipherAlphabets() {
     console.log(alphaStr);
 
     //Prints the key
-
     for (var i = 0; i < cipherAlphabets.length; i++) {
       var str = "";
 
