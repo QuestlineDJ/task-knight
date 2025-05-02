@@ -25,6 +25,7 @@ function SaveWindow() {
 
       <input
         type="file"
+        title=" "
         accept=".txt"
         className="button scale upload"
         onChange={loadFile}
