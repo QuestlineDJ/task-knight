@@ -56,7 +56,6 @@ function SaveWindow() {
 
     file = event.target.files[0];
     event.target.value = "";
-    console.log(file);
     //Finds buttons, casted to an image element
     const cancelElement: HTMLImageElement = document.getElementById("cancel") as HTMLImageElement;
     const confirmElement: HTMLImageElement = document.getElementById("confirm") as HTMLImageElement;
@@ -73,7 +72,6 @@ function SaveWindow() {
     if (!file) {
       return;
     }
-    loadFile(file);
 
     //Finds buttons, casted to an image element
     const cancelElement: HTMLImageElement = getImage("cancel");
@@ -81,9 +79,12 @@ function SaveWindow() {
 
     //Null checks
     if (nullCheck(cancelElement, confirmElement)) {
-      cancelElement.src = pictures[0];
-      confirmElement.src = pictures[2];
-      isButtonActive = false;
+      if (isButtonActive) {
+        cancelElement.src = pictures[0];
+        confirmElement.src = pictures[2];
+        isButtonActive = false;
+        loadFile(file);
+      }
     }
   }
 
