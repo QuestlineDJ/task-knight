@@ -268,7 +268,7 @@ export default function TaskSystem() {
     }
   }
 
-  window.onload = onLoadHandler;
+  window.addEventListener('load', function(){ onLoadHandler()});
 
   // --- RENDER UI + LOGIC ---
   return (
