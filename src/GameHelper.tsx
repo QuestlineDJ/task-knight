@@ -1,6 +1,5 @@
 import {
   setLocalStorage,
-  getAllLocalStorage,
   getAllMappedLocalStorage,
   getLocalStorage,
 } from "./LocalStorageManager";
