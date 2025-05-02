@@ -38,7 +38,6 @@
     height: 75%;
     pointer-events: auto;
     cursor: pointer;
-    background-image: url("src/images/saveScreen/upload_button.png");
 }
 
 .cancel-button

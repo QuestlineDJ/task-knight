@@ -2,12 +2,18 @@ import SaveButton from "./SaveButton";
 import DeleteAllSavedDataButton from "./DeleteAllSavedDataButton";
 import { loadFile } from "../LocalStorageManager";
 import "../SaveScreen.css";
+import saveBanner from "../images/saveScreen/saved_banner.png";
+import gray_cancel_buton from "../images/saveScreen/gray_cancel_button.png";
+import gray_confirm_button from "../images/saveScreen/gray_confirm_button.png";
+import cancel_buton from "../images/saveScreen/cancel_button.png";
+import confirm_button from "../images/saveScreen/confirm_button.png";
+import upload_button from "../images/saveScreen/upload_button.png";
 
 const pictures = [
-  "src/images/saveScreen/gray_cancel_button.png",
-  "src/images/saveScreen/cancel_button.png",
-  "src/images/saveScreen/gray_confirm_button.png",
-  "src/images/saveScreen/confirm_button.png"
+  gray_cancel_buton,
+  cancel_buton,
+  gray_confirm_button,
+  confirm_button
 ];
 
 function SaveWindow() {
@@ -21,7 +27,7 @@ function SaveWindow() {
       </p>
 
       <aside className="scale heading">
-        <img src="src\images\saveScreen\saved_banner.png"></img>
+        <img src={saveBanner}></img>
       </aside>
 
       <div className="scale download">
@@ -43,7 +49,12 @@ function SaveWindow() {
         accept=".txt"
         className="scale upload"
         onChange={uploadFile}
-      ></input>
+
+        style={{
+          backgroundImage: "url(" + upload_button + ")"
+        }}
+      >
+      </input>
     </div>
   );
 
