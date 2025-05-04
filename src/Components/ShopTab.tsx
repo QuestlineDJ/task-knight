@@ -37,8 +37,19 @@ function ShopTab({
   var isShopOpen = false;
   return (
     <div className="scale">
-      <p className="deleteButton">
-        <img src={damagePoster}></img>
+      <p className="damage">
+        <img
+          src={damagePoster}
+          onClick={() =>
+            increasePlayerDamage(
+              currentGoldAmount,
+              setCurrentGoldAmount,
+              setDamageAmount,
+              damageAmount,
+              currentGoldAmount
+            )
+          }
+        ></img>
       </p>
     </div>
   );
