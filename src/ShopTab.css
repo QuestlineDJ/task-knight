@@ -5,10 +5,41 @@
     background-size: cover;
 }
 
-.damage{
+.shopHeading{
+    position: absolute;
+    top: 0%;
+    left: -6%;
+    width: 70%;
+    height: 0%;
+    pointer-events: auto;
+}
+
+.increaseDamage{
     position: absolute;
     top: -0%;
-    left: -37%;
+    left: -30%;
+    width: 38%;
+    height: 75%;
+    transform: scale(.35);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.damageEnemy{
+    position: absolute;
+    top: -0%;
+    left: -10%;
+    width: 38%;
+    height: 75%;
+    transform: scale(.35);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.defeatEnemy{
+    position: absolute;
+    top: -0%;
+    left: 10%;
     width: 38%;
     height: 75%;
     transform: scale(.35);
