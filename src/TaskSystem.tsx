@@ -59,6 +59,7 @@ export default function TaskSystem() {
   const [showOverdue, setShowOverdue] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
   const [isSaveWindowOpen, setSaveWindowOpen] = useState(false);
+  const [isShopWindowOpen, setShopWindowOpen] = useState(false);
 
   // React state variables that control enemy
   const [enemyHealth, setEnemyHealth] = useState<number>(100);
@@ -307,46 +308,64 @@ export default function TaskSystem() {
                 pointerEvents: "auto",
               }}
             >
-              {isSaveWindowOpen ? (<SaveWindow />) : <><TaskForm
-                callback={handleSave}
-                task={editTask}
-                active={showEditor}
-                cancel_callback={cancel_editor}
-              />
+              {isSaveWindowOpen && <SaveWindow></SaveWindow>}
+              {isShopWindowOpen && (
+                <ShopTab
+                  enemyHealth={enemyHealth}
+                  currentGoldAmount={currentGoldAmount}
+                  damageAmount={damageAmount}
+                  setCurrentGoldAmount={setCurrentGoldAmount}
+                  setDamageAmount={setDamageAmount}
+                  currentImage={currentImage}
+                  images={images}
+                  setEnemyHealth={setEnemyHealth}
+                  setCurrentImage={setCurrentImage}
+                ></ShopTab>
+              )}
+              {!isSaveWindowOpen && !isShopWindowOpen && (
+                <>
+                  <TaskForm
+                    callback={handleSave}
+                    task={editTask}
+                    active={showEditor}
+                    cancel_callback={cancel_editor}
+                  />
 
-              <TaskList
-                name="Overdue Tasks"
-                action={true}
-                active={showOverdue}
-                tasks={overdueTasks}
-                delete_handle={delete_task}
-                edit_handle={set_edit_task}
-                complete_handle={complete_task}
-              />
-              <TaskList
-                name={filterName}
-                action={true}
-                active={showTodayTasks}
-                tasks={filterTasks}
-                delete_handle={delete_task}
-                edit_handle={set_edit_task}
-                complete_handle={complete_task}
-              />
-              <TaskList
-                name="Active Tasks"
-                action={true}
-                active={showActive}
-                tasks={activeTasks}
-                delete_handle={delete_task}
-                edit_handle={set_edit_task}
-                complete_handle={complete_task}
-              />
-              <TaskList
-                name="Complete Tasks"
-                action={false}
-                active={showComplete}
-                tasks={completeTasks}
-              /></>}
+                  <TaskList
+                    name="Overdue Tasks"
+                    action={true}
+                    active={showOverdue}
+                    tasks={overdueTasks}
+                    delete_handle={delete_task}
+                    edit_handle={set_edit_task}
+                    complete_handle={complete_task}
+                  />
+                  <TaskList
+                    name={filterName}
+                    action={true}
+                    active={showTodayTasks}
+                    tasks={filterTasks}
+                    delete_handle={delete_task}
+                    edit_handle={set_edit_task}
+                    complete_handle={complete_task}
+                  />
+                  <TaskList
+                    name="Active Tasks"
+                    action={true}
+                    active={showActive}
+                    tasks={activeTasks}
+                    delete_handle={delete_task}
+                    edit_handle={set_edit_task}
+                    complete_handle={complete_task}
+                  />
+                  <TaskList
+                    name="Complete Tasks"
+                    action={false}
+                    active={showComplete}
+                    tasks={completeTasks}
+                  />
+                </>
+              )}
             </div>
           </div>
         </section>
@@ -373,20 +392,13 @@ export default function TaskSystem() {
           >
             <img src={btnAdd} alt="Add Task Button" className="button-add" />
           </button>
-          <div>
-            <ShopTab
-              enemyHealth={enemyHealth}
-              currentGoldAmount={currentGoldAmount}
-              damageAmount={damageAmount}
-              setCurrentGoldAmount={setCurrentGoldAmount}
-              setDamageAmount={setDamageAmount}
-              currentImage={currentImage}
-              images={images}
-              setEnemyHealth={setEnemyHealth}
-              setCurrentImage={setCurrentImage}
-            ></ShopTab>
-          </div>
-          <button className="open-screen-button" onClick={() => setSaveWindowOpen(!isSaveWindowOpen)}>
+          <button onClick={() => setShopWindowOpen(!isShopWindowOpen)}>
+            Shop
+          </button>
+          <button
+            className="open-screen-button"
+            onClick={() => setSaveWindowOpen(!isSaveWindowOpen)}
+          >
             Toggle Save Screen
           </button>
         </aside>
