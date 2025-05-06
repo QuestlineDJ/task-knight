@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { computeFieldDate } from "./TaskUtilities"
+import { computeFieldDate } from "./TaskUtilities";
 
 /**
  * Create the task form for editing task
@@ -9,14 +9,16 @@ export function TaskForm({ callback, task, active, cancel_callback }: any) {
     return <></>;
   }
 
-   // Task fields state variables
+  // Task fields state variables
   const [name, setName] = useState(task.name);
   const [priority, setPriority] = useState(task.priority);
-  const [due, setDue] = useState(computeFieldDate(new Date(task.due_time * 1000), true));
+  const [due, setDue] = useState(
+    computeFieldDate(new Date(task.due_time * 1000), true)
+  );
 
   return (
-    <div>
-      <label>
+    <div className="toggletext">
+      <label className="toggletext">
         Name:{" "}
         <input
           type="text"
@@ -54,11 +56,8 @@ export function TaskForm({ callback, task, active, cancel_callback }: any) {
       >
         Save
       </button>
-      <button
-         type="button"
-         onClick={cancel_callback}
-      >
-         Cancel
+      <button type="button" onClick={cancel_callback}>
+        Cancel
       </button>
     </div>
   );
