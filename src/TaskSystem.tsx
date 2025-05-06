@@ -272,13 +272,13 @@ export default function TaskSystem() {
 
   // --- RENDER UI + LOGIC ---
   return (
-    <div className="app-container">
+    <div className="app-container no-select">
       <header className="header">
-        <img src={headerLeft} alt="Left Header" />
+        <img src={headerLeft} alt="Left Header" draggable="false"/>
         <p>Health: {enemyHealth}</p>
         <div className="header-right">
           <span className="gold-amount">Gold: {currentGoldAmount}</span>
-          <img src={headerRight} alt="Right Header" />
+          <img src={headerRight} alt="Right Header" draggable="false"/>
         </div>
       </header>
 
@@ -287,16 +287,17 @@ export default function TaskSystem() {
 
         <section className="content">
           <div className="game-scene">
-            <img src={character} alt="Character" className="character" />
+            <img src={character} alt="Character" className="character" draggable="false"/>
             <img
               src={images[currentImage]}
               alt="Boss Sprite"
               className="dragon"
+              draggable="false"
             />
           </div>
 
           <div className="ui-overlay">
-            <img src={panelBg} alt="Panel Background" className="panel-bg" />
+            <img src={panelBg} alt="Panel Background" className="panel-bg" draggable="false"/>
             <div
               className="overlay-content"
               style={{
@@ -370,19 +371,21 @@ export default function TaskSystem() {
           </div>
         </section>
 
-        <aside className="sidebar right-sidebar">
+        <aside className="sidebar right-sidebar no-select">
           {!isSaveWindowOpen && !isShopWindowOpen && (
                       <img
                       src={btnUpDown}
                       alt="Reorder Button"
                       className="button-updown"
                       onClick={() => toggleData()}
+                      draggable="false"
                     />
           )}
 
           <button
             className="createTask"
             type="button"
+            draggable="false"
             onClick={() => {new_task(); setSaveWindowOpen(false); setShopWindowOpen(false); }}
             style={{
               backgroundSize: "cover",
@@ -393,7 +396,7 @@ export default function TaskSystem() {
               outline: "none",
             }}
           >
-            <img src={btnAdd} alt="Add Task Button" className="button-add" />
+            <img src={btnAdd} alt="Add Task Button" className="button-add" draggable="false"/>
           </button>
           <button onClick={() => {setShopWindowOpen(!isShopWindowOpen); setSaveWindowOpen(false); }}>
             Shop
