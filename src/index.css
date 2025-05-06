@@ -62,14 +62,14 @@ html, body, #root {
 }
 
 .character {
-  top: 32%;
+  top: 30%;
   left: 30%;
   width: 4%;
 
 }
 
 .dragon {
-  top: 10.5%;
+  top: 8.5%;
   right: 25%;
   width: 25%;
 }
@@ -89,7 +89,7 @@ html, body, #root {
 .panel-bg {
   width: 100%;
   display: block;
-
+  
 }
 
 .task-list {

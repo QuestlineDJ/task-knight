@@ -17,8 +17,8 @@ export function TaskForm({ callback, task, active, cancel_callback }: any) {
   );
 
   return (
-    <div className="toggletext">
-      <label className="toggletext">
+    <div>
+      <label>
         Name:{" "}
         <input
           type="text"

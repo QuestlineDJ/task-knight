@@ -33,7 +33,10 @@ export function TaskList({
 
   return (
     <div>
-      <h1>{name}</h1>
+      <div>
+        <h1>{name}</h1>
+      </div>
+
       <div>{list_of_tasks}</div>
     </div>
   );
