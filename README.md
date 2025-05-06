@@ -63,3 +63,24 @@ After running the above command open your browser and enter the url outputed by 
 2.  Copy working to main.
 3.  Copy main to gh-pages.
 4.  Go to https://questlinedj.github.io/task-knight/ and refresh the page until your changes appear.
+
+### Documentation
+
+CookieManager.tsx - Manages cookies in a server.
+EnemyDamage.tsx - Fires a damage function against an enemy.
+GameHelper.tsx - Manages game system functions.
+LocalStorageManager.tsx - Manages save system functions.
+main.tsx - Manages React functions.
+TaskDisplay.tsx - Manages the image of the task system.
+TaskForm.tsx - Manages the user-interactive parts of the task system.
+TaskList.tsx - Manages the task list system.
+TaskSystem.tsx - Central task system, and visual display functionality.
+
+### Contributing
+
+1. Create a fork of the repo
+2. Create a new branch (`git checkout -b feature-branch`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature-branch`)
+5. Open a pull request
+6. Await approval
