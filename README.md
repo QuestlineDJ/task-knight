@@ -66,15 +66,15 @@ After running the above command open your browser and enter the url outputed by 
 
 ### Documentation
 
-CookieManager.tsx - Manages cookies in a server.
-EnemyDamage.tsx - Fires a damage function against an enemy.
-GameHelper.tsx - Manages game system functions.
-LocalStorageManager.tsx - Manages save system functions.
-main.tsx - Manages React functions.
-TaskDisplay.tsx - Manages the image of the task system.
-TaskForm.tsx - Manages the user-interactive parts of the task system.
-TaskList.tsx - Manages the task list system.
-TaskSystem.tsx - Central task system, and visual display functionality.
+   CookieManager.tsx - Manages cookies in a server.
+   EnemyDamage.tsx - Fires a damage function against an enemy.
+   GameHelper.tsx - Manages game system functions.
+   LocalStorageManager.tsx - Manages save system functions.
+   main.tsx - Manages React functions.
+   TaskDisplay.tsx - Manages the image of the task system.
+   TaskForm.tsx - Manages the user-interactive parts of the task system.
+   TaskList.tsx - Manages the task list system.
+   TaskSystem.tsx - Central task system, and visual display functionality.
 
 ### Contributing
 
