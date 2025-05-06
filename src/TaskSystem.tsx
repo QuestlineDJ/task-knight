@@ -371,16 +371,19 @@ export default function TaskSystem() {
         </section>
 
         <aside className="sidebar right-sidebar">
-          <img
-            src={btnUpDown}
-            alt="Reorder Button"
-            className="button-updown"
-            onClick={() => toggleData()}
-          />
+          {!isSaveWindowOpen && !isShopWindowOpen && (
+                      <img
+                      src={btnUpDown}
+                      alt="Reorder Button"
+                      className="button-updown"
+                      onClick={() => toggleData()}
+                    />
+          )}
+
           <button
             className="createTask"
             type="button"
-            onClick={new_task}
+            onClick={() => {new_task(); setSaveWindowOpen(false); setShopWindowOpen(false); }}
             style={{
               backgroundSize: "cover",
               backgroundColor: "transparent",
