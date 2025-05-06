@@ -395,12 +395,12 @@ export default function TaskSystem() {
           >
             <img src={btnAdd} alt="Add Task Button" className="button-add" />
           </button>
-          <button onClick={() => setShopWindowOpen(!isShopWindowOpen)}>
+          <button onClick={() => {setShopWindowOpen(!isShopWindowOpen); setSaveWindowOpen(false); }}>
             Shop
           </button>
           <button
             className="open-screen-button"
-            onClick={() => setSaveWindowOpen(!isSaveWindowOpen)}
+            onClick={() => {setSaveWindowOpen(!isSaveWindowOpen); setShopWindowOpen(false);} }
           >
             Toggle Save Screen
           </button>
