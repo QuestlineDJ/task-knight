@@ -303,10 +303,13 @@ export default function TaskSystem() {
               style={{
                 position: "absolute",
                 top: "10%",
-                left: "40%",
-                width: "90%",
+                left: "8%",
+                width: "85%",
                 height: "80%",
                 pointerEvents: "auto",
+                overflow: "scroll",
+                overflowX: "hidden",
+                scrollbarWidth: "none",
               }}
             >
               {isSaveWindowOpen && <SaveWindow></SaveWindow>}

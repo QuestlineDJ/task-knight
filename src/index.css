@@ -62,14 +62,14 @@ html, body, #root {
 }
 
 .character {
-  top: 32%;
+  top: 30%;
   left: 30%;
   width: 4%;
 
 }
 
 .dragon {
-  top: 10.5%;
+  top: 8.5%;
   right: 25%;
   width: 25%;
 }
@@ -83,17 +83,19 @@ html, body, #root {
   transform: translateX(-50%);
   width: 100%;
   max-width: 780px;
+  
 }
 
 .panel-bg {
   width: 100%;
   display: block;
+  
 }
 
 .task-list {
   position: absolute;
   top: 15%;
-  left: 5%;
+  left: 15%;
   width: 90%;
   overflow-y: scroll;
   max-height: 75%;
@@ -103,12 +105,13 @@ html, body, #root {
   position: relative;
   margin-bottom: 1rem;
   transform: translateX(-50%);
+  
 }
 
 .task-banner{
   position: relative;
   width: 90%;
-  left: 15%;
+  left: 55%;
 }
 
 .list-item-bg {
@@ -119,10 +122,11 @@ html, body, #root {
 .task-text {
   position: absolute;
   top: 60%;
-  left: 20%;
+  left: 60%;
   transform: translateY(-50%);
   font-family: 'Comic Sans MS', sans-serif;
   font-size: 1rem;
+  
 }
 
 /* === RIGHT BUTTONS === */
