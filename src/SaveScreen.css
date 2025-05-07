@@ -8,7 +8,7 @@
 .heading {
     position: absolute;
     top: 0%;
-    left: -24%;
+    left: 10%;
     width: 70%;
     height: 0%;
     pointer-events: auto;
@@ -18,13 +18,13 @@
 {
     position: absolute;
     top: 92%;
-    left: 40%;
+    left: 82%;
 }
 
 .download {
     position: absolute;
     top: 25%;
-    left: -0.5%;
+    left: 42%;
     width: 38.1%;
     height: 80%;
     cursor: pointer;
@@ -33,9 +33,9 @@
 .upload {
     position: absolute;
     top: 25%;
-    left: -37%;
-    width: 38%;
-    height: 75%;
+    left: 5.5%;
+    width: 38.1%;
+    height: 70%;
     pointer-events: auto;
     cursor: pointer;
 }
@@ -45,7 +45,7 @@
     position: absolute;
     z-index: 10;
     top: 62%;
-    left: 40%;
+    left: 85%;
     width: 13%;
     height: 13%;
     cursor: pointer;
@@ -56,7 +56,7 @@
     position: absolute;
     z-index: 10;
     top: 32%;
-    left: 40%;
+    left: 85%;
     width: 13%;
     height: 13%;
     cursor: pointer;
