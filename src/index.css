@@ -129,6 +129,16 @@ html, body, #root {
   
 }
 
+/* === LEFT BUTTONS === */
+.left-sidebar {
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 2rem;
+}
+
 /* === RIGHT BUTTONS === */
 .right-sidebar {
   width: 120px;

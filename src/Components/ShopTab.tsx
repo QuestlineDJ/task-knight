@@ -4,8 +4,8 @@ import { defeatEnemy, increasePlayerDamage } from "../GameHelper";
 import { damageEnemyShop } from "../GameHelper";
 import "../ShopTab.css";
 import damagePoster from "../assets/Task Knight Assets/Main Panel/Shop Panel/damagePoster.png";
-import damageEnemyPoster from "../assets/Task Knight Assets/Main Panel/Shop Panel/bluePoster_comingsoon.png";
-import defeatEnemyPoster from "../assets/Task Knight Assets/Main Panel/Shop Panel/greenPoster_comingsoon.png";
+import damageEnemyPoster from "../assets/Task Knight Assets/Main Panel/Shop Panel/damage_enemy_poster.png";
+import defeatEnemyPoster from "../assets/Task Knight Assets/Main Panel/Shop Panel/kill_enemy_poster.png";
 
 type ShopTabProps = {
   enemyHealth: number;
@@ -39,7 +39,6 @@ function ShopTab({
   var isShopOpen = false;
   return (
     <div className="scale">
-      <h1 className="scale shopHeading">Welcome To The Shop!</h1>
       <p className="scale increaseDamage">
         <img
           src={damagePoster}

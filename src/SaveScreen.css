@@ -14,11 +14,14 @@
     pointer-events: auto;
 }
 
-.deleteButton
+.delete
 {
     position: absolute;
-    top: 92%;
-    left: 82%;
+    top: 2.5%;
+    left: 0%;
+    width: 9%;
+    height: 9%;
+    cursor: pointer;
 }
 
 .download {

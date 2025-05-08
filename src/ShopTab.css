@@ -16,10 +16,10 @@
 
 .increaseDamage{
     position: absolute;
-    top: -5%;
-    left: -5%;
-    width: 50%;
-    height: 75%;
+    top: -32%;
+    left: -33%;
+    width: 100%;
+    height: 100%;
     transform: scale(.35);
     pointer-events: auto;
     cursor: pointer;
@@ -27,10 +27,10 @@
 
 .damageEnemy{
     position: absolute;
-    top: -0%;
-    left: 25%;
-    width: 50%;
-    height: 75%;
+    top: -27%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
     transform: scale(.35);
     pointer-events: auto;
     cursor: pointer;
@@ -38,10 +38,10 @@
 
 .defeatEnemy{
     position: absolute;
-    top: -0%;
-    left: 50%;
-    width: 50%;
-    height: 75%;
+    top: -27%;
+    left: 33%;
+    width: 100%;
+    height: 100%;
     transform: scale(.35);
     pointer-events: auto;
     cursor: pointer;

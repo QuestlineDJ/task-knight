@@ -22,9 +22,9 @@ function SaveWindow() {
 
   return (
     <div className="scale">
-      <p className="deleteButton">
+      <div className="scale delete">
         <DeleteAllSavedDataButton />
-      </p>
+      </div>
 
       <aside className="scale heading">
         <img src={saveBanner}></img>

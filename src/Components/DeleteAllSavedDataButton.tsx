@@ -1,7 +1,8 @@
 import { deleteAllLocalStorage } from "../LocalStorageManager";
+import delete_save from "../images/saveScreen/delete_data_icon.png";
 
 function DeleteAllSavedDataButton() {
-  return <button onClick={deleteStorage}>Delete All Progress</button>;
+  return <img src={delete_save} onClick={deleteStorage}></img>;
 }
 
 /**

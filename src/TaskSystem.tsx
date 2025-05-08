@@ -14,6 +14,9 @@ import panelBg from "./assets/Task Knight Assets/Main Panel/Task Panel/panel_tas
 import btnUpDown from "./assets/Task Knight Assets/Main Panel/Task Panel/sortButton.png";
 import btnAdd from "./assets/Task Knight Assets/Main Panel/Task Panel/addButton.png";
 
+import shopButton from "./images/screensButton/shop_button.png";
+import saveButton from "./images/screensButton/save_button.png";
+
 import {
   Task,
   getCurrentTime,
@@ -274,20 +277,33 @@ export default function TaskSystem() {
   return (
     <div className="app-container no-select">
       <header className="header">
-        <img src={headerLeft} alt="Left Header" draggable="false"/>
+        <img src={headerLeft} alt="Left Header" draggable="false" />
         <p>Health: {enemyHealth}</p>
         <div className="header-right">
           <span className="gold-amount">Gold: {currentGoldAmount}</span>
-          <img src={headerRight} alt="Right Header" draggable="false"/>
+          <img src={headerRight} alt="Right Header" draggable="false" />
         </div>
       </header>
 
       <div className="main-content">
-        <aside className="sidebar left-sidebar" />
+        <aside className="sidebar left-sidebar no-select">
+          <img
+            className="open-screen-button button-updown"
+            src={saveButton}
+            draggable="false"
+            onClick={() => { setSaveWindowOpen(!isSaveWindowOpen); setShopWindowOpen(false); }}
+          />
+          <img
+            className="button-updown"
+            src={shopButton}
+            draggable="false"
+            onClick={() => { setShopWindowOpen(!isShopWindowOpen); setSaveWindowOpen(false); }}
+          />
+        </aside>
 
         <section className="content">
           <div className="game-scene">
-            <img src={character} alt="Character" className="character" draggable="false"/>
+            <img src={character} alt="Character" className="character" draggable="false" />
             <img
               src={images[currentImage]}
               alt="Boss Sprite"
@@ -297,7 +313,7 @@ export default function TaskSystem() {
           </div>
 
           <div className="ui-overlay">
-            <img src={panelBg} alt="Panel Background" className="panel-bg" draggable="false"/>
+            <img src={panelBg} alt="Panel Background" className="panel-bg" draggable="false" />
             <div
               className="overlay-content"
               style={{
@@ -376,40 +392,33 @@ export default function TaskSystem() {
 
         <aside className="sidebar right-sidebar no-select">
           {!isSaveWindowOpen && !isShopWindowOpen && (
-                      <img
-                      src={btnUpDown}
-                      alt="Reorder Button"
-                      className="button-updown"
-                      onClick={() => toggleData()}
-                      draggable="false"
-                    />
-          )}
+            <>
+              <img
+                src={btnUpDown}
+                alt="Reorder Button"
+                className="button-updown"
+                onClick={() => toggleData()}
+                draggable="false"
+              />
 
-          <button
-            className="createTask"
-            type="button"
-            draggable="false"
-            onClick={() => {new_task(); setSaveWindowOpen(false); setShopWindowOpen(false); }}
-            style={{
-              backgroundSize: "cover",
-              backgroundColor: "transparent",
-              width: "100%",
-              placeItems: "center",
-              border: "none",
-              outline: "none",
-            }}
-          >
-            <img src={btnAdd} alt="Add Task Button" className="button-add" draggable="false"/>
-          </button>
-          <button onClick={() => {setShopWindowOpen(!isShopWindowOpen); setSaveWindowOpen(false); }}>
-            Shop
-          </button>
-          <button
-            className="open-screen-button"
-            onClick={() => {setSaveWindowOpen(!isSaveWindowOpen); setShopWindowOpen(false);} }
-          >
-            Toggle Save Screen
-          </button>
+              <button
+                className="createTask"
+                type="button"
+                draggable="false"
+                onClick={() => { new_task(); setSaveWindowOpen(false); setShopWindowOpen(false); }}
+                style={{
+                  backgroundSize: "cover",
+                  backgroundColor: "transparent",
+                  width: "100%",
+                  placeItems: "center",
+                  border: "none",
+                  outline: "none",
+                }}
+              >
+                <img src={btnAdd} alt="Add Task Button" className="button-add" draggable="false" />
+              </button>
+            </>
+          )}
         </aside>
       </div>
     </div>
