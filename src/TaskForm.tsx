@@ -16,6 +16,13 @@ export function TaskForm({ callback, task, active, cancel_callback }: any) {
     computeFieldDate(new Date(task.due_time * 1000), true)
   );
 
+  function updateName(name: str) {
+      if ( name.length < 50 ) {
+         setName(name);
+      }
+   }
+
+
   return (
     <div>
       <label>
@@ -23,7 +30,7 @@ export function TaskForm({ callback, task, active, cancel_callback }: any) {
         <input
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => updateName(e.target.value)}
         />
       </label>
       <br />
