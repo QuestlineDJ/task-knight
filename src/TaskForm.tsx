@@ -16,8 +16,8 @@ export function TaskForm({ callback, task, active, cancel_callback }: any) {
     computeFieldDate(new Date(task.due_time * 1000), true)
   );
 
-  function updateName(name: str) {
-      if ( name.length < 50 ) {
+  function updateName(name: string) {
+      if ( name.length < 32 ) {
          setName(name);
       }
    }
