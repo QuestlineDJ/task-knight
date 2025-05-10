@@ -539,7 +539,7 @@ export function defeatEnemy(
         sendGameDataToLocalStorage();
 
         giveGold(setCurrentGoldAmount);
-      }, 500);
+      }, 10);
     }
 
     return newHealth;
