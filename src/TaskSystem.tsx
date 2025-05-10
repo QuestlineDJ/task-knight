@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import headerLeft from "./assets/Task Knight Assets/Corner UI/emptyLevelBadge.png";
 import headerRight from "./assets/Task Knight Assets/Corner UI/goldBag.png";
 
-import character from "./assets/Task Knight Assets/Character UI & Sprites/playerCharacter_default.png";
-import dragon from "./assets/Task Knight Assets/Character UI & Sprites/boss_dragon.png";
-import dragon2 from "./assets/Task Knight Assets/Character UI & Sprites/boss_dragon_blue.png";
-import dragon3 from "./assets/Task Knight Assets/Character UI & Sprites/boss_dragon_purple.png";
+import character from "./assets/Task Knight Assets/Animations/playerIdle.gif";
+import dragon from "./assets/Task Knight Assets/Animations/bossSlimeIdle.gif";
+import dragon2 from "./assets/Task Knight Assets/Animations/bossKnightIdle.gif";
+import dragon3 from "./assets/Task Knight Assets/Animations/bossDragonIdle.gif";
 
 import panelBg from "./assets/Task Knight Assets/Main Panel/Task Panel/panel_tasks.png";
 
@@ -278,7 +278,7 @@ export default function TaskSystem() {
     <div className="app-container no-select">
       <header className="header">
         <img src={headerLeft} alt="Left Header" draggable="false" />
-        <p>Health: {enemyHealth}</p>
+        <p>Boss HP: {enemyHealth}</p>
         <div className="header-right">
           <span className="gold-amount">Gold: {currentGoldAmount}</span>
           <img src={headerRight} alt="Right Header" draggable="false" />
@@ -291,19 +291,30 @@ export default function TaskSystem() {
             className="open-screen-button button-updown"
             src={saveButton}
             draggable="false"
-            onClick={() => { setSaveWindowOpen(!isSaveWindowOpen); setShopWindowOpen(false); }}
+            onClick={() => {
+              setSaveWindowOpen(!isSaveWindowOpen);
+              setShopWindowOpen(false);
+            }}
           />
           <img
             className="button-updown"
             src={shopButton}
             draggable="false"
-            onClick={() => { setShopWindowOpen(!isShopWindowOpen); setSaveWindowOpen(false); }}
+            onClick={() => {
+              setShopWindowOpen(!isShopWindowOpen);
+              setSaveWindowOpen(false);
+            }}
           />
         </aside>
 
         <section className="content">
           <div className="game-scene">
-            <img src={character} alt="Character" className="character" draggable="false" />
+            <img
+              src={character}
+              alt="Character"
+              className="character"
+              draggable="false"
+            />
             <img
               src={images[currentImage]}
               alt="Boss Sprite"
@@ -313,7 +324,12 @@ export default function TaskSystem() {
           </div>
 
           <div className="ui-overlay">
-            <img src={panelBg} alt="Panel Background" className="panel-bg" draggable="false" />
+            <img
+              src={panelBg}
+              alt="Panel Background"
+              className="panel-bg"
+              draggable="false"
+            />
             <div
               className="overlay-content"
               style={{
@@ -405,7 +421,11 @@ export default function TaskSystem() {
                 className="createTask"
                 type="button"
                 draggable="false"
-                onClick={() => { new_task(); setSaveWindowOpen(false); setShopWindowOpen(false); }}
+                onClick={() => {
+                  new_task();
+                  setSaveWindowOpen(false);
+                  setShopWindowOpen(false);
+                }}
                 style={{
                   backgroundSize: "cover",
                   backgroundColor: "transparent",
@@ -415,7 +435,12 @@ export default function TaskSystem() {
                   outline: "none",
                 }}
               >
-                <img src={btnAdd} alt="Add Task Button" className="button-add" draggable="false" />
+                <img
+                  src={btnAdd}
+                  alt="Add Task Button"
+                  className="button-add"
+                  draggable="false"
+                />
               </button>
             </>
           )}
